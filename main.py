@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from lib.ets_images import EtsImage
+from lib.ets_layers import Layers
+from lib.ets_settings import *
 from PIL import Image, ImageTk
 from external.xcanvas import XCanvas
 from widgets.ets_workzone import Workzone
@@ -17,6 +19,8 @@ class App(ctk.CTk):
         self.title("Photo Editor")
         self.minsize(800, 600)
 
+        self.layers = Layers()
+
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
         #tabs
@@ -24,28 +28,38 @@ class App(ctk.CTk):
         tabview.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
         tabview.add("Workspace")  # add tab at the end
-        tabview.tab("Workspace").configure(fg_color="green")
+        tabview.tab("Workspace").configure()
         tabview.tab("Workspace").grid(column=1, row=0, padx=0, pady=0, sticky="nsew")
         tabview.tab("Workspace").rowconfigure(0, weight=1)
         tabview.tab("Workspace").columnconfigure(0, weight=16)
         tabview.tab("Workspace").columnconfigure(1, weight=12)
+
+        tab_workzone = Workzone(master = tabview.tab("Workspace"), layers=self.layers)        
+        tab_workzone.image=self.layers.stacked_trim
+        tab_workzone.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
+
+        layers_label = ctk.CTkLabel(master = tabview.tab("Workspace"), text="Layers")
+        layers_label.grid(column=1, row=0, padx=0, pady=0)
+
+        print("---->", range(0, int(len(self.layers.layers))))
+
+        layer_selection = ctk.CTkOptionMenu(master = tabview.tab("Workspace"), values=[str(x) for x in range(0, int(len(self.layers.layers)))],
+                                         command= lambda value: tab_workzone.change_current_layer(value))
+        layer_selection.grid(column=1, row=0, padx=0, pady=0)
+
         
         tabview.add("Layers")  # add tab at the end
         tabview.add("Settings")  # add tab at the end
-        
         tabview.set("Workspace")  # set currently visible tab
 
-        tab_workzone = Workzone(master = tabview.tab("Workspace"))
-        #tab_workzone.pack(side="bottom", fill="both")
         
-        tab_workzone.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
         #layout
         """ self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=6)
         self.columnconfigure(1, weight=6)
         self.columnconfigure(2, weight=2) """
-
+        
 
         self.mainloop()
 

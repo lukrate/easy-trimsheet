@@ -31,6 +31,10 @@ class EtsImage:
         self.image_ratio = self.width / self.height
 
     def trim_image(self, x, y, width=IMAGE_SIZE_DEFAULT, height=IMAGE_SIZE_DEFAULT):
+        self.current_pos_x = x
+        self.current_pos_y = y
+        self.current_height = height
+        self.current_width = width
         self.trimmed_image = self.np_image[y:y + height, x:x + width]
 
     def get_trimmed_image(self):
@@ -46,7 +50,7 @@ class EtsImage:
 
 
 if __name__ == "__main__":
-    img1 = easyImage("./images/Brick_wall_006_COLOR.jpg")
+    img1 = EtsImage("./images/Brick_wall_006_COLOR.jpg")
     #print(img1)
     trimmed_img = img1.trim_image(img1.NP_image, 200, 200, 512, 512)
     img1.show_image(trimmed_img)
