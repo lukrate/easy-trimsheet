@@ -1,43 +1,54 @@
-import tkinter as tk
-from tkinter import ttk, scrolledtext
+import customtkinter as ctk
 from lib.ets_images import EtsImage
 from PIL import Image, ImageTk
 from external.xcanvas import XCanvas
+from widgets.ets_workzone import Workzone
 # list of events
 # pythontutorial.net/tkinter/tkinter-event-binding
 
 #window
-window = tk.Tk()
-window.title("Trim")
-window.geometry("800x600")
+class App(ctk.CTk):
+    def __init__(self):
+        
+        #setup
+        super().__init__()
+        ctk.set_appearance_mode("dark")
+        self.geometry("1200x800")
+        self.title("Photo Editor")
+        self.minsize(800, 600)
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
+        #tabs
+        tabview = ctk.CTkTabview(master=self)
+        tabview.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
+
+        tabview.add("Workspace")  # add tab at the end
+        tabview.tab("Workspace").configure(fg_color="green")
+        tabview.tab("Workspace").grid(column=1, row=0, padx=0, pady=0, sticky="nsew")
+        tabview.tab("Workspace").rowconfigure(0, weight=1)
+        tabview.tab("Workspace").columnconfigure(0, weight=16)
+        tabview.tab("Workspace").columnconfigure(1, weight=12)
+        
+        tabview.add("Layers")  # add tab at the end
+        tabview.add("Settings")  # add tab at the end
+        
+        tabview.set("Workspace")  # set currently visible tab
+
+        tab_workzone = Workzone(master = tabview.tab("Workspace"))
+        #tab_workzone.pack(side="bottom", fill="both")
+        
+        tab_workzone.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
+
+        #layout
+        """ self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=6)
+        self.columnconfigure(1, weight=6)
+        self.columnconfigure(2, weight=2) """
 
 
-#slider
-scale_int = tk.IntVar(value = 600)
-pos_int = tk.IntVar(value = 0)
-scale = ttk.Scale(window, command=lambda value: update_img(scale_int.get(), pos_int.get()), from_=10, to=2048, length=2048, orient="horizontal", variable=scale_int)
-scale.pack()
-position = ttk.Scale(window, command=lambda value: update_img(scale_int.get(), pos_int.get()), from_=10, to=2048, length=2048, orient="horizontal", variable=pos_int)
-position.pack()
-
-canvas = XCanvas(window, scalewidget=True, x_axis=7, y_axis=7, width=2048, height=2048)
+        self.mainloop()
 
 
-img1 = EtsImage("./images/Brick_wall_006_COLOR.jpg")
-#print(img1)
-
-
-
-#print(trimmed_img)
-def update_img(scale, position):
-    trimmed_img = img1.trim_image(img1.NP_image, 0, position, 2048, scale)
-    #print(trimmed_img)
-    print(trimmed_img.shape)
-    print(canvas.width, canvas.height)
-    image_layout = ImageTk.PhotoImage(Image.fromarray(trimmed_img))
-
-    canvas.create_image(1, 1, image=image_layout ,anchor=tk.NW)
-    canvas.image = image_layout
-
-
-window.mainloop()
+if __name__ == "__main__":
+    App()
