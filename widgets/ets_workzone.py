@@ -1,8 +1,9 @@
 from lib.ets_settings import *
-import lib.ets_store as store
 import customtkinter as ctk
 from PIL import ImageTk, Image
 from tkinter import Canvas
+
+from ets_workzone_layers import WorkzoneLayers
 
 class Workzone(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
@@ -24,11 +25,17 @@ class Workzone(ctk.CTkFrame):
         self.columnconfigure(0, weight=50)
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
+        self.columnconfigure(3, weight=30)
         self.rowconfigure(0, weight=1)
 
+
+        # ------------- CANVAS --------------
+        
         self.canvas = Canvas(self, background=BACKGROUND_COLOR, bd="0", highlightthickness=0, relief="ridge")
         self.canvas.grid(row=0, column=0, sticky="nsew")
         self.canvas.bind("<Configure>", self.resize_image)
+
+        # ------------- SLIDER 1 --------------
 
         self.slider_position = ctk.CTkSlider(
             self, 
@@ -36,16 +43,25 @@ class Workzone(ctk.CTkFrame):
             orientation="vertical", 
             variable=self.current_pos_h,
             command=lambda value: self.update_img(self.current_trim_h.get(), self.current_pos_h.get()))
-        self.slider_position.grid(row=0, column=1, padx=10, pady=20, sticky="nsew")
+        self.slider_position.grid(row=0, column=1, padx=10, pady=20, sticky="ns")
         
+        # ------------- SLIDER 2 --------------
+
         self.slider_trim = ctk.CTkSlider(
             self,
             from_=10, to=2048,
             orientation="vertical",
             variable=self.current_trim_h,
             command=lambda value: self.update_img(self.current_trim_h.get(), self.current_pos_h.get()))
-        self.slider_trim.grid(row=0, column=2, padx=10, pady=20, sticky="nsew")
+        self.slider_trim.grid(row=0, column=2, padx=10, pady=20, sticky="ns")
         
+
+        # ------------- LAYERS --------------
+
+        self.layers_view = WorkzoneLayers(self, self.layers)
+
+        # ------------- DEFAULT IMAGE CREATION --------------
+
         self.image = Image.new(mode="RGB", size=(IMAGE_SIZE_DEFAULT, IMAGE_SIZE_DEFAULT))
         print(self.image)
         self.image_ratio = self.image.size[0] / self.image.size[1]
