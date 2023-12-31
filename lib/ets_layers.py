@@ -22,6 +22,8 @@ class Layers:
     def add_new_image(self, image:object = None, path:str = None):
         if not path == None:
             self.layers.append(EtsImage(path))
+            self.layers[-1].trim_image(0,0, height=350)
+            self.construct_image()
         else:
             self.layers.append(image)
 
