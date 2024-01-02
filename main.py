@@ -16,7 +16,7 @@ class App(ctk.CTk):
         super().__init__()
         ctk.set_appearance_mode("dark")
         self.geometry("1200x800")
-        self.title("Photo Editor")
+        self.title("Easy Trimsheet")
         self.minsize(800, 600)
 
         self.layers = Layers()
