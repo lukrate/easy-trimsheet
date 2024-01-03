@@ -17,8 +17,7 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1)
-        self.rowconfigure(2, weight=45)
+        self.rowconfigure(1, weight=45)
 
 
         print("---->", range(0, int(len(self.layers.images))))
@@ -29,12 +28,9 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.button_add_picture = ctk.CTkButton(self, text="+", command=self.open_image_view)
         self.button_add_picture.grid(column=1, row=0, padx=0, pady=0, sticky="nse")
 
-        """ self.layer_selection = ctk.CTkOptionMenu(master = self, values=[str(x) for x in range(0, int(len(self.layers.images)))],
-                                         command= lambda value: master.change_current_layer(value))
-        self.layer_selection.grid(column=0, row=1, padx=0, pady=10, columnspan=2, sticky="ew") """
-
         self.layer_frame = ctk.CTkScrollableFrame(master=self)
-        self.layer_frame.grid(column=0, row=2, padx=0, pady=0, columnspan=2, sticky="nsew")
+        self.layer_frame.grid(column=0, row=1, padx=0, pady=0, columnspan=2, sticky="nsew")
+        self.layer_frame.columnconfigure(0, weight=1)
 
         self.layer_blocks = []
         self.create_layers()
@@ -71,7 +67,7 @@ class WorkzoneLayer(ctk.CTkFrame):
                 self.configure(fg_color = DARK_GREY) 
 
         self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=3)
+        self.columnconfigure(1, weight=5)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
@@ -84,9 +80,9 @@ class WorkzoneLayer(ctk.CTkFrame):
             border_spacing=0,
             command= lambda : layers.change_current_layer(self.id)
         )
-        self.thumbnail_button.grid(column=0, rowspan=2, sticky="ns")
+        self.thumbnail_button.grid(column=0, rowspan=2, sticky="nsw")
         
         self.thumbnail_label = ctk.CTkLabel(self, text=f"Layer {id}")
-        self.thumbnail_label.grid(column=1, row=0, sticky="nsew", padx=20)
+        self.thumbnail_label.grid(column=1, row=0, sticky="nsw", padx=20)
 
-        self.grid(column=0, row=id, sticky="ew", pady=10)
+        self.grid(column=0, row=id, sticky="nsew", pady=10)

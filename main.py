@@ -24,11 +24,10 @@ class App(ctk.CTk):
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
         #tabs
-        tabview = ctk.CTkTabview(master=self)
+        tabview = ctk.CTkTabview(master=self, anchor="nw")
         tabview.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
         tabview.add("Workspace")  # add tab at the end
-        tabview.tab("Workspace").configure()
         tabview.tab("Workspace").grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
         tabview.tab("Workspace").rowconfigure(0, weight=1)
         tabview.tab("Workspace").columnconfigure(0, weight=1)
