@@ -3,8 +3,6 @@ from PIL import Image
 import numpy as np
 from ets_settings import *
 from ets_images import EtsImage
-import ets_store as store
-import customtkinter as ctk
 
 class Layers:
     def __init__(self):
