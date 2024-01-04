@@ -20,10 +20,7 @@ class OpenImageView(ctk.CTkToplevel):
     def open_dialog(self):
         try:
             self.path_value.set(filedialog.askopenfile(initialdir=f"{curdir}/images").name)
-            #self.import_func(path)
-            print(self.path_value)
             self.layers.add_new_image(path=self.path_value.get())
-            #self.grid_remove()
         except AttributeError:
             path = None
             pass

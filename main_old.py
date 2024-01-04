@@ -31,9 +31,6 @@ img1 = EtsImage("./images/Brick_wall_006_COLOR.jpg")
 #print(trimmed_img)
 def update_img(scale, position):
     trimmed_img = img1.trim_image(img1.NP_image, 0, position, 2048, scale)
-    #print(trimmed_img)
-    print(trimmed_img.shape)
-    print(canvas.width, canvas.height)
     image_layout = ImageTk.PhotoImage(Image.fromarray(trimmed_img))
 
     canvas.create_image(1, 1, image=image_layout ,anchor=tk.NW)

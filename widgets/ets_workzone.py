@@ -8,7 +8,6 @@ from ets_workzone_layers import WorkzoneLayers
 class Workzone(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
         super().__init__(master, **kwargs)
-        print(master)
 
         self.canvas_height = 0
         self.canvas_width = 0
@@ -65,7 +64,7 @@ class Workzone(ctk.CTkFrame):
         # ------------- DEFAULT IMAGE CREATION --------------
 
         self.image = Image.new(mode="RGB", size=(IMAGE_SIZE_DEFAULT, IMAGE_SIZE_DEFAULT))
-        print(self.image)
+        
         self.image_ratio = self.image.size[0] / self.image.size[1]
 
         self.layers.workzone_widgets = self

@@ -31,13 +31,13 @@ class Layers:
         if not images_dict == None:
             self.images.append(EtsImage(images_dict))
             self.images[-1].trim_image(0,0, height=350)
-            self.construct_image()
+            self.construct_image(update_layers=True)
 
     def get_free_space(self):
         return IMAGE_SIZE_DEFAULT - self.stacked_trim_array.shape[0]
 
 
-    def construct_image(self):
+    def construct_image(self, update_layers = False):
         final_img_array = None
         for k,v in enumerate(self.images):
             if k == 0:
@@ -50,13 +50,13 @@ class Layers:
         self.stacked_trim = final_img
         self.free_space = self.get_free_space()
 
-        print(self.workzone_widgets)
+
         if not self.workzone_widgets == None:
-            print("update canvas")
             self.workzone_widgets.update_canvas()
+            if update_layers == True and not self.workzone_widgets.layers_view == None:
+                self.workzone_widgets.layers_view.create_layers()
     
     def change_current_layer(self, value):
-        print(value)
         value = int(value)
         self.workzone_widgets.current_layer.set(value)
         self.workzone_widgets.current_pos_h.set(self.images[value].current_pos_y)

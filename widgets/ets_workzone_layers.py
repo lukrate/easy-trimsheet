@@ -9,7 +9,6 @@ from lib.utils import get_image_dictionnary
 class WorkzoneLayers(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
         super().__init__(master, **kwargs)
-        print(master)
         
         self.layers = layers
         self.open_image_window = None
@@ -19,9 +18,6 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=45)
-
-
-        print("---->", range(0, int(len(self.layers.images))))
 
         self.layers_label = ctk.CTkLabel(master = self, text="Layers")
         self.layers_label.grid(column=0, row=0, padx=0, pady=10)
@@ -39,7 +35,6 @@ class WorkzoneLayers(ctk.CTkFrame):
     def create_layers(self):
         self.layer_blocks = []
         for key, layer in enumerate(self.layers.images):
-            print(key, layer)
             self.layer_blocks.append(WorkzoneLayer(self.layer_frame, self.layers, key))
 
     def open_image_view(self):

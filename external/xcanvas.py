@@ -155,7 +155,6 @@ class XCanvas(tk.Canvas):
         self.xview_scroll(int(-1*(event.delta/120)), "units")
     
     def fit_canvas(self, event):
-        print(event.keysym)
         self.scalewidget.set(100)
     
     def draw_axis(self, m, n):
