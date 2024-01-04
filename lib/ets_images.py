@@ -2,11 +2,15 @@ from ets_settings import *
 from PIL import Image
 import cv2
 import numpy as np
+from icecream import ic
+import os
 
 class EtsImage:
 
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, images_dict):
+        self.collection = images_dict
+        ic(self.collection)
+        self.path = os.path.join(self.collection["path"], self.collection["color"])
         self.width = None
         self.height = None
         self.dtype = None
@@ -17,9 +21,9 @@ class EtsImage:
         self.np_image = None
         self.trimmed_image = None
 
-        self.openImage(path)
+        self.openImage()
 
-    def openImage(self, path):
+    def openImage(self):
         self.pil_image = Image.open(self.path)
         self.np_image = np.array(self.pil_image)
     

@@ -3,6 +3,7 @@ from PIL import Image
 import numpy as np
 from ets_settings import *
 from ets_images import EtsImage
+from utils import get_image_dictionnary
 
 class Layers:
     def __init__(self):
@@ -26,17 +27,11 @@ class Layers:
         img = Image.new(mode="RGB", size=(size, size))
         return img
     
-    def add_new_image(self, image:object = None, path:str = None):
-        if not path == None:
-            self.images.append(EtsImage(path))
+    def add_new_image(self, images_dict:dict = None):
+        if not images_dict == None:
+            self.images.append(EtsImage(images_dict))
             self.images[-1].trim_image(0,0, height=350)
             self.construct_image()
-            try:
-                self.workzone_widgets.layers_view.create_layers()
-            except AttributeError:
-                pass
-        else:
-            self.images.append(image)
 
     def get_free_space(self):
         return IMAGE_SIZE_DEFAULT - self.stacked_trim_array.shape[0]
@@ -69,24 +64,12 @@ class Layers:
         self.workzone_widgets.layers_view.create_layers()
     
     def test_images(self):
-        path = os.path.join(os.getcwd(), 'images', 'Brick_wall_006_COLOR.jpg')
-        self.add_new_image(path = path)
-        path_2 = os.path.join(os.getcwd(), 'images', 'photo_2023-04-23_16-26-56.jpg')
-        self.add_new_image(path = path_2)
-        self.images[0].trim_image(0,0, height=350)
-        self.images[1].trim_image(0,0, height=350)
+        images_dict = get_image_dictionnary(os.path.join(os.getcwd(), 'images', 'RoofingTiles014A', "2k"))
+        self.add_new_image(images_dict = images_dict)
+        self.images[-1].trim_image(0,0, height=350)
+        images_dict_2 = get_image_dictionnary(os.path.join(os.getcwd(), 'images', 'wood_planks', "2k"))
+        self.add_new_image(images_dict = images_dict_2)
+        self.images[-1].trim_image(0,0, height=350)
 
         self.construct_image()
         #self.stacked_trim.show()    
-
-if __name__ == "__main__":
-    content = Layers()
-    path = os.path.join(os.getcwd(), 'images', 'Brick_wall_006_COLOR.jpg')
-    content.add_new_image(path = path)
-    path_2 = os.path.join(os.getcwd(), 'images', 'photo_2023-04-23_16-26-56.jpg')
-    content.add_new_image(path = path_2)
-    content.images[0].trim_image(0,0, height=350)
-    content.images[1].trim_image(0,0, height=350)
-
-    content.construct_image()
-    content.stacked_trim.show()

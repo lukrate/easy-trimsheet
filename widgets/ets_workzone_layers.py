@@ -4,6 +4,7 @@ from tkinter import filedialog
 from ets_open_image_view import OpenImageView
 from PIL import ImageTk
 from os import curdir
+from lib.utils import get_image_dictionnary
 
 class WorkzoneLayers(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
@@ -42,10 +43,8 @@ class WorkzoneLayers(ctk.CTkFrame):
             self.layer_blocks.append(WorkzoneLayer(self.layer_frame, self.layers, key))
 
     def open_image_view(self):
-        self.path_value = (filedialog.askopenfile(initialdir=f"{curdir}/images").name)
-            #self.import_func(path)
-        print(self.path_value)
-        self.layers.add_new_image(path=self.path_value)
+        images_path = (filedialog.askdirectory(initialdir=f"{curdir}/images"))
+        self.layers.add_new_image(get_image_dictionnary(images_path))
 
         """ if self.open_image_window is None or not self.open_image_window.winfo_exists():
             self.open_image_window = OpenImageView(layers=self.layers)  # create window if its None or destroyed
