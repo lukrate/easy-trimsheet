@@ -66,6 +66,12 @@ class Layers:
         self.workzone_widgets.current_trim_h.set(self.images[value].current_height)
         self.workzone_widgets.layers_view.create_layers()
     
+    def export_final_files(self, selected_files, file_name, destination_folder):
+        ic(selected_files)
+        ic(file_name)
+        ic(destination_folder)
+
+
     def test_images(self):
         images_dict = get_image_dictionnary(os.path.join(os.getcwd(), 'images', 'RoofingTiles014A', "2k"))
         self.add_new_image(images_dict = images_dict, height=350)

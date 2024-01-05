@@ -5,6 +5,7 @@ from lib.ets_settings import *
 from PIL import Image, ImageTk
 from external.xcanvas import XCanvas
 from widgets.ets_workzone import Workzone
+from widgets.ets_exportzone import Exportzone
 # list of events
 # pythontutorial.net/tkinter/tkinter-event-binding
 
@@ -24,10 +25,12 @@ class App(ctk.CTk):
 
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
-        #tabs
+        
+        #----------------- TABS INIT
         tabview = ctk.CTkTabview(master=self, anchor="nw")
         tabview.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
+        #----------------- TAB WORKSPACE
         tabview.add("Workspace")  # add tab at the end
         tabview.tab("Workspace").grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
         tabview.tab("Workspace").rowconfigure(0, weight=1)
@@ -37,11 +40,21 @@ class App(ctk.CTk):
         tab_workzone.image=self.layers.stacked_trim
         tab_workzone.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
-                
+        #----------------- TAB LAYERS        
         tabview.add("Layers")  # add tab at the end
+
+        #----------------- TAB EXPORT
         tabview.add("Export")  # add tab at the end
+        tabview.tab("Export").grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
+        tabview.tab("Export").rowconfigure(0, weight=1)
+        tabview.tab("Export").columnconfigure(0, weight=1)
+
+        tab_workzone = Exportzone(master = tabview.tab("Export"), layers=self.layers)
+        tab_workzone.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
+
+        #----------------- TAB SETTTINGS
         tabview.add("Settings")  # add tab at the end
-        tabview.set("Workspace")  # set currently visible tab
+        tabview.set("Export")  # set currently visible tab
 
         
 
