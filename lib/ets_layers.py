@@ -39,7 +39,6 @@ class Layers:
     def get_free_space(self):
         return IMAGE_SIZE_DEFAULT - self.stacked_trim_array.shape[0]
 
-
     def construct_image(self, update_layers = False):
         final_img_array = None
         for k,v in enumerate(self.images):
@@ -53,12 +52,12 @@ class Layers:
         self.stacked_trim = final_img
         self.free_space = self.get_free_space()
 
-
         if not self.workzone_widgets == None:
             self.workzone_widgets.update_canvas()
             if update_layers == True and not self.workzone_widgets.layers_view == None:
                 self.workzone_widgets.layers_view.create_layers()
     
+
     def change_current_layer(self, value):
         value = int(value)
         self.workzone_widgets.current_layer.set(value)
@@ -66,7 +65,18 @@ class Layers:
         self.workzone_widgets.current_trim_h.set(self.images[value].current_height)
         self.workzone_widgets.layers_view.create_layers()
     
+
+    def change_all_material_map(self, map_name):
+        for image in self.images:
+            image.change_material_map(map_name)
+        self.construct_image(update_layers=True)
+
+
     def export_final_files(self, selected_files, file_name, destination_folder):
+        for s_file in selected_files:
+            self.change_all_material_map(s_file)
+            self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + ".jpg")) 
+
         ic(selected_files)
         ic(file_name)
         ic(destination_folder)

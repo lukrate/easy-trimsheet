@@ -31,7 +31,7 @@ class EtsImage:
         self.shape = self.np_image.shape
         self.width = self.shape[0]
         self.height = self.shape[1]
-        self.layer = self.shape[2]
+        #self.layer = self.shape[2]
         self.image_ratio = self.width / self.height
 
     def trim_image(self, x, y, width=IMAGE_SIZE_DEFAULT, height=IMAGE_SIZE_DEFAULT):
@@ -43,6 +43,11 @@ class EtsImage:
 
     def get_trimmed_image(self):
         return self.trimmed_image
+    
+    def change_material_map(self, map_name):
+        self.path = os.path.join(self.collection["path"], self.collection[map_name])
+        self.openImage()
+        self.trim_image(self.current_pos_x, self.current_pos_y, self.current_width, self.current_height)
 
     def show_image(self, img, name="Show Image"):
         cv2.imshow(name, img)
