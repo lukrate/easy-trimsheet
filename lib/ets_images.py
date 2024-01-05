@@ -9,7 +9,7 @@ class EtsImage:
 
     def __init__(self, images_dict):
         self.collection = images_dict
-        ic(self.collection)
+        #ic(self.collection)
         self.path = os.path.join(self.collection["path"], self.collection["color"])
         self.width = None
         self.height = None

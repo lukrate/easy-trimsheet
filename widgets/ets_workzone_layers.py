@@ -10,10 +10,11 @@ class WorkzoneLayers(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
         super().__init__(master, **kwargs)
         
+
         self.layers = layers
         self.open_image_window = None
 
-        self.grid(row = 0, column = 3, sticky="nsew", rowspan=2)
+        self.grid(row = 0, column = 3, sticky="nsew", rowspan=3)
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
@@ -26,8 +27,9 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.button_add_picture.grid(column=1, row=0, padx=0, pady=0, sticky="nse")
 
         self.layer_frame = ctk.CTkScrollableFrame(master=self)
-        self.layer_frame.grid(column=0, row=1, padx=0, pady=0, columnspan=2, sticky="nsew")
+        self.layer_frame.grid(column=0, row=1, padx=2, pady=0, columnspan=2, sticky="nsew")
         self.layer_frame.columnconfigure(0, weight=1)
+        self.layer_frame.configure(fg_color=DARK_GREY)
 
         self.layer_blocks = []
         self.create_layers()
@@ -51,14 +53,14 @@ class WorkzoneLayers(ctk.CTkFrame):
 class WorkzoneLayer(ctk.CTkFrame):
     def __init__(self, master, layers, id, **kwargs):
         super().__init__(master, **kwargs)
-
+        
         self.id = id
         try:
             if self.id == layers.workzone_widgets.current_layer.get():
-                self.configure(fg_color = DARK_GREY) 
+                self.configure(fg_color = LIGHT_GREY) 
         except AttributeError:
             if self.id == 0:
-                self.configure(fg_color = DARK_GREY) 
+                self.configure(fg_color = LIGHT_GREY) 
 
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=5)

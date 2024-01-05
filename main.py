@@ -18,6 +18,7 @@ class App(ctk.CTk):
         self.geometry("1200x800")
         self.title("Easy Trimsheet")
         self.minsize(800, 600)
+        self.bind_all("<Button-1>", lambda event: event.widget.focus_set())
 
         self.layers = Layers()
 
@@ -38,6 +39,7 @@ class App(ctk.CTk):
 
                 
         tabview.add("Layers")  # add tab at the end
+        tabview.add("Export")  # add tab at the end
         tabview.add("Settings")  # add tab at the end
         tabview.set("Workspace")  # set currently visible tab
 

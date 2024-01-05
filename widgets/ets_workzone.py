@@ -1,13 +1,14 @@
 from lib.ets_settings import *
 import customtkinter as ctk
 from PIL import ImageTk, Image
-from tkinter import Canvas
+from tkinter import Canvas, ttk
 
 from ets_workzone_layers import WorkzoneLayers
 
 class Workzone(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
         super().__init__(master, **kwargs)
+
 
         self.canvas_height = 0
         self.canvas_width = 0
@@ -24,18 +25,28 @@ class Workzone(ctk.CTkFrame):
         self.columnconfigure(2, weight=1)
         self.columnconfigure(3, weight=30)
         self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, weight=100)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=120)
 
 
         # ------------- CANVAS --------------
         
-        self.canvas = Canvas(self, background=BACKGROUND_COLOR, bd="0", highlightthickness=0, relief="ridge")
-        self.canvas.grid(row=0, column=0, sticky="nsew", rowspan=2)
+        self.canvas = Canvas(self, background=BACKGROUND_COLOR, bg=BACKGROUND_COLOR, bd="0", highlightthickness=0, relief="ridge")
+        self.canvas.grid(row=0, column=0, sticky="nsew", rowspan=3)
         self.canvas.bind("<Configure>", self.resize_image)
 
         # ------------- SLIDER 1 --------------
         self.label_position = ctk.CTkLabel(self, text="Position")
         self.label_position.grid(row=0, column=1, padx=10, pady=0, sticky="ew")
+        
+        self.input_position = ctk.CTkEntry(
+            self, 
+            width=50,
+            textvariable=self.current_pos_h,
+            placeholder_text=0
+        )
+        self.input_position.bind("<Return>", command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
+        self.input_position.grid(row=1, column=1, padx=20, pady=0, sticky="ew")
 
         self.slider_position = ctk.CTkSlider(
             self, 
@@ -43,18 +54,26 @@ class Workzone(ctk.CTkFrame):
             orientation="vertical", 
             variable=self.current_pos_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
-        self.slider_position.grid(row=1, column=1, padx=10, pady=20, sticky="ns")
+        self.slider_position.grid(row=2, column=1, padx=10, pady=20, sticky="ns")
+        
         
         # ------------- SLIDER 2 --------------
         self.label_trim = ctk.CTkLabel(self, text="Height")
         self.label_trim.grid(row=0, column=2, padx=10, pady=0, sticky="ew")
+        self.input_trim = ctk.CTkEntry(
+            self, 
+            width=50,
+            textvariable=self.current_trim_h,        
+        )
+        self.input_trim.bind("<Return>", command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
+        self.input_trim.grid(row=1, column=2, padx=20, pady=0, sticky="ew")
         self.slider_trim = ctk.CTkSlider(
             self,
             from_=10, to=2048,
             orientation="vertical",
             variable=self.current_trim_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
-        self.slider_trim.grid(row=1, column=2, padx=10, pady=20, sticky="ns")
+        self.slider_trim.grid(row=2, column=2, padx=10, pady=20, sticky="ns")
         #endregion view
 
         # ------------- LAYERS --------------

@@ -50,6 +50,6 @@ def get_image_dictionnary(path):
 
 
     
-ic(get_image_dictionnary(img_path))
+""" ic(get_image_dictionnary(img_path))
 ic(get_image_dictionnary(img_path_2))
-ic(get_image_dictionnary(img_path_3))
+ic(get_image_dictionnary(img_path_3)) """

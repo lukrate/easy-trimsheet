@@ -4,6 +4,7 @@ import numpy as np
 from ets_settings import *
 from ets_images import EtsImage
 from utils import get_image_dictionnary
+from icecream import ic
 
 class Layers:
     def __init__(self):
@@ -20,6 +21,7 @@ class Layers:
         self.workzone_widgets = None
 
         self.test_images()
+        ic(self.get_free_space())
 
 
 
@@ -27,10 +29,11 @@ class Layers:
         img = Image.new(mode="RGB", size=(size, size))
         return img
     
-    def add_new_image(self, images_dict:dict = None):
+    def add_new_image(self, images_dict:dict = None, height = None):
+        height = self.get_free_space() if height == None else height
         if not images_dict == None:
             self.images.append(EtsImage(images_dict))
-            self.images[-1].trim_image(0,0, height=350)
+            self.images[-1].trim_image(0,0, height=height)
             self.construct_image(update_layers=True)
 
     def get_free_space(self):
@@ -65,11 +68,9 @@ class Layers:
     
     def test_images(self):
         images_dict = get_image_dictionnary(os.path.join(os.getcwd(), 'images', 'RoofingTiles014A', "2k"))
-        self.add_new_image(images_dict = images_dict)
-        self.images[-1].trim_image(0,0, height=350)
+        self.add_new_image(images_dict = images_dict, height=350)
         images_dict_2 = get_image_dictionnary(os.path.join(os.getcwd(), 'images', 'wood_planks', "2k"))
-        self.add_new_image(images_dict = images_dict_2)
-        self.images[-1].trim_image(0,0, height=350)
+        self.add_new_image(images_dict = images_dict_2, height=850)
 
         self.construct_image()
         #self.stacked_trim.show()    
