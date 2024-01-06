@@ -1,9 +1,6 @@
 import customtkinter as ctk
-from lib.ets_images import EtsImage
 from lib.ets_layers import Layers
 from lib.ets_settings import *
-from PIL import Image, ImageTk
-from external.xcanvas import XCanvas
 from widgets.ets_workzone import Workzone
 from widgets.ets_exportzone import Exportzone
 # list of events
@@ -54,16 +51,11 @@ class App(ctk.CTk):
 
         #----------------- TAB SETTTINGS
         tabview.add("Settings")  # add tab at the end
-        tabview.set("Export")  # set currently visible tab
+        tabview.set("Workspace")  # set currently visible tab
 
         
 
         #layout
-        """ self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=6)
-        self.columnconfigure(1, weight=6)
-        self.columnconfigure(2, weight=2) """
-        
 
         self.mainloop()
 

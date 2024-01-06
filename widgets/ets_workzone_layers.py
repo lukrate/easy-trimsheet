@@ -63,7 +63,9 @@ class WorkzoneLayer(ctk.CTkFrame):
     def __init__(self, master, layers, id, **kwargs):
         super().__init__(master, **kwargs)
         
+        self.layers = layers
         self.id = id
+        ic(self.id)
         try:
             if self.id == layers.workzone_widgets.current_layer.get():
                 self.configure(fg_color = LIGHT_GREY) 
@@ -72,7 +74,10 @@ class WorkzoneLayer(ctk.CTkFrame):
                 self.configure(fg_color = LIGHT_GREY) 
 
         self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=5)
+        self.columnconfigure(1, weight=2)
+        self.columnconfigure(2, weight=1)
+        self.columnconfigure(3, weight=1)
+        self.columnconfigure(4, weight=1)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
@@ -89,5 +94,16 @@ class WorkzoneLayer(ctk.CTkFrame):
         
         self.thumbnail_label = ctk.CTkLabel(self, text=f"Layer {id}")
         self.thumbnail_label.grid(column=1, row=0, sticky="nsw", padx=20)
+
+        self.duplicate_button = ctk.CTkButton(self, text="D", width=28, command= lambda: self.layers.duplicate_layer(self.id))
+        self.duplicate_button.grid(column=3, row=1, padx=5, sticky="e")
+        
+        if self.id != 0:
+            self.move_top_button = ctk.CTkButton(self, text="▲", width=28, command= lambda: self.layers.move_layer(self.id, direction= -1))
+            self.move_top_button.grid(column=4, row=0, padx=5, sticky="e")
+        
+        if self.id != len(self.layers.images) -1:
+            self.move_down_button = ctk.CTkButton(self, text="▼", width=28, command= lambda: self.layers.move_layer(self.id, direction= 1))
+            self.move_down_button.grid(column=4, row=1, padx=5, sticky="e")
 
         self.grid(column=0, row=id, sticky="nsew", pady=10)

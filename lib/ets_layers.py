@@ -5,6 +5,7 @@ from ets_settings import *
 from ets_images import EtsImage
 from utils import get_image_dictionnary
 from icecream import ic
+from copy import copy
 
 class Layers:
     def __init__(self):
@@ -21,7 +22,7 @@ class Layers:
         self.workzone_widgets = None
         
         self.test_images()
-        ic(self.get_free_space())
+        #ic(self.get_free_space())
 
 
 
@@ -47,8 +48,7 @@ class Layers:
                     if img.collection[key] != None:
                         a_maps.append(key)
                         break
-        self.available_maps = a_maps        
-        ic(self.available_maps)
+        self.available_maps = a_maps
         return self.available_maps
 
     def construct_image(self, update_layers = False):
@@ -78,6 +78,13 @@ class Layers:
         self.workzone_widgets.current_trim_h.set(self.images[value].current_height)
         self.workzone_widgets.layers_view.create_layers()
     
+    def move_layer(self, id, direction):
+        self.images[id], self.images[id + direction] = self.images[id + direction], self.images[id]
+        self.construct_image(update_layers=True)
+
+    def duplicate_layer(self, id):        
+        self.images.insert(id, copy(self.images[id]))
+        self.construct_image(update_layers=True)
 
     def change_all_material_map(self, map_name):
         for image in self.images:
@@ -90,9 +97,9 @@ class Layers:
             self.change_all_material_map(s_file)
             self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + ".jpg")) 
 
-        ic(selected_files)
+        """ ic(selected_files)
         ic(file_name)
-        ic(destination_folder)
+        ic(destination_folder) """
 
 
     def test_images(self):
