@@ -11,15 +11,15 @@ class Layers:
         self.size = IMAGE_SIZE_DEFAULT
         self.background = self.generate_background(self.size)
  
-        self.update_canvas = None
         self.images = [] #collections of images
+        self.available_maps = []
 
         self.stacked_trim_array = [] #np array of images trimmed
         self.stacked_trim = None #final image
         self.free_space = IMAGE_SIZE_DEFAULT #freespace under existing images
 
         self.workzone_widgets = None
-
+        
         self.test_images()
         ic(self.get_free_space())
 
@@ -38,6 +38,18 @@ class Layers:
 
     def get_free_space(self):
         return IMAGE_SIZE_DEFAULT - self.stacked_trim_array.shape[0]
+    
+    def get_available_maps(self):
+        a_maps = []
+        for key, value in FILE_NAME_PATTERNS.items():
+            if key != "normal":
+                for img in self.images:
+                    if img.collection[key] != None:
+                        a_maps.append(key)
+                        break
+        self.available_maps = a_maps        
+        ic(self.available_maps)
+        return self.available_maps
 
     def construct_image(self, update_layers = False):
         final_img_array = None
@@ -51,6 +63,7 @@ class Layers:
         self.stacked_trim_array = final_img_array
         self.stacked_trim = final_img
         self.free_space = self.get_free_space()
+        self.get_available_maps()
 
         if not self.workzone_widgets == None:
             self.workzone_widgets.update_canvas()

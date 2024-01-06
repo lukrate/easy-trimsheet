@@ -5,6 +5,7 @@ from ets_open_image_view import OpenImageView
 from PIL import ImageTk
 from os import curdir
 from lib.utils import get_image_dictionnary
+from icecream import ic
 
 class WorkzoneLayers(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
@@ -17,17 +18,21 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.grid(row = 0, column = 3, sticky="nsew", rowspan=3)
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=45)
 
         self.layers_label = ctk.CTkLabel(master = self, text="Layers")
-        self.layers_label.grid(column=0, row=0, padx=0, pady=10)
+        self.layers_label.grid(column=0, row=0, padx=0, pady=5)
 
-        self.button_add_picture = ctk.CTkButton(self, text="+", command=self.open_image_view)
-        self.button_add_picture.grid(column=1, row=0, padx=0, pady=0, sticky="nse")
+        self.layers_map_list = ctk.CTkOptionMenu(self, values=self.layers.available_maps, command=lambda value: self.change_current_map(value))
+        self.layers_map_list.grid(column=1, row=0, pady=5, sticky="ew")
+
+        self.button_add_picture = ctk.CTkButton(self, text="+", command=self.open_image_view, width=48, height=32)
+        self.button_add_picture.grid(column=2, row=0, padx=0, pady=0, sticky="nse")
 
         self.layer_frame = ctk.CTkScrollableFrame(master=self)
-        self.layer_frame.grid(column=0, row=1, padx=2, pady=0, columnspan=2, sticky="nsew")
+        self.layer_frame.grid(column=0, row=1, padx=2, pady=0, columnspan=3, sticky="nsew")
         self.layer_frame.columnconfigure(0, weight=1)
         self.layer_frame.configure(fg_color=DARK_GREY)
 
@@ -42,6 +47,10 @@ class WorkzoneLayers(ctk.CTkFrame):
     def open_image_view(self):
         images_path = (filedialog.askdirectory(initialdir=f"{curdir}/images"))
         self.layers.add_new_image(get_image_dictionnary(images_path))
+    
+    def change_current_map(self, map_name):
+        self.layers.change_all_material_map(map_name)
+        
 
         """ if self.open_image_window is None or not self.open_image_window.winfo_exists():
             self.open_image_window = OpenImageView(layers=self.layers)  # create window if its None or destroyed
