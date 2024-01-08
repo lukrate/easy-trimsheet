@@ -43,9 +43,9 @@ class Workzone(ctk.CTkFrame):
         self.canvas.bind('<MouseWheel>', self.zoom_on_mouse_wheel)
         self.canvas.bind('<ButtonPress-1>', self.move_from_click)
         self.canvas.bind('<B1-Motion>', self.move_to_on_click)
-        self.canvas.bind('<Button-5>',   self.zoom_on_mouse_wheel)  # zoom for Linux, wheel scroll down
-        self.canvas.bind('<Button-4>',   self.zoom_on_mouse_wheel) # zoom for Linux, wheel scroll up
-
+        self.canvas.bind('<Button-5>', self.zoom_on_mouse_wheel)  # zoom for Linux, wheel scroll down
+        self.canvas.bind('<Button-4>', self.zoom_on_mouse_wheel) # zoom for Linux, wheel scroll up
+        self.canvas.bind('r', self.reset_canvas)
         # ------------- SLIDER 1 --------------
         self.label_position = ctk.CTkLabel(self, text="Position")
         self.label_position.grid(row=0, column=1, padx=10, pady=0, sticky="ew")
@@ -111,7 +111,10 @@ class Workzone(ctk.CTkFrame):
             image_height = image_width / self.image_ratio
         #place image
         self.canvas.delete("all")
-        resized_image = self.image.resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
+        try:
+            resized_image = self.image.resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
+        except AttributeError:
+            resized_image = Image.new(mode="RGB", size=(IMAGE_SIZE_DEFAULT, IMAGE_SIZE_DEFAULT)).resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
         self.image_tk = ImageTk.PhotoImage(resized_image)
         self.canvas.create_image(
             self.canvas_width/2 - self.offset_x ,
@@ -145,6 +148,14 @@ class Workzone(ctk.CTkFrame):
         new_pos_y = round((event.y - self.drag_origin_y))
         self.offset_x = self.pos_origin_x - new_pos_x
         self.offset_y = self.pos_origin_y - new_pos_y
+        self.canvas.event_generate("<Configure>")
+    
+    def reset_canvas(self, event):
+        self.offset_x = 0
+        self.offset_y = 0
+        self.pos_origin_x = 0
+        self.pos_origin_y = 0
+        self.zoom_level = 1
         self.canvas.event_generate("<Configure>")
 
     def sliders_update_current_trim(self, scale, position):

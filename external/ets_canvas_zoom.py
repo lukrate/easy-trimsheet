@@ -35,7 +35,6 @@ class PanZoomCanvas(tk.Frame):
         if not filename:
             return
         # PIL.Image
-        ic(filename)
         self.pil_image = filename
         # Set the affine transformation matrix to display the entire image.
         self.zoom_fit(self.pil_image.width, self.pil_image.height)

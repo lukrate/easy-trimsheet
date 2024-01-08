@@ -20,6 +20,7 @@ class Layers:
         self.free_space = IMAGE_SIZE_DEFAULT #freespace under existing images
 
         self.workzone_widgets = None
+        self.export_widgets = None
         
         self.test_images()
         #ic(self.get_free_space())
@@ -34,11 +35,15 @@ class Layers:
         height = self.get_free_space() if height == None else height
         if not images_dict == None:
             self.images.append(EtsImage(images_dict))
+            self.get_available_maps()
             self.images[-1].trim_image(0,0, height=height)
             self.construct_image(update_layers=True)
 
     def get_free_space(self):
-        return IMAGE_SIZE_DEFAULT - self.stacked_trim_array.shape[0]
+        try:
+            return IMAGE_SIZE_DEFAULT - self.stacked_trim_array.shape[0]
+        except AttributeError:
+            return IMAGE_SIZE_DEFAULT
     
     def get_available_maps(self):
         a_maps = []
@@ -58,17 +63,23 @@ class Layers:
                 final_img_array = v.trimmed_image
             else:
                 final_img_array = np.vstack((final_img_array, v.trimmed_image))
+        
         final_img = self.background.copy()
-        final_img.paste(Image.fromarray(final_img_array))
-        self.stacked_trim_array = final_img_array
+        try:
+            final_img.paste(Image.fromarray(final_img_array))
+            self.stacked_trim_array = final_img_array
+        except AttributeError:
+            pass
+        
         self.stacked_trim = final_img
         self.free_space = self.get_free_space()
-        self.get_available_maps()
+        
 
         if not self.workzone_widgets == None:
             self.workzone_widgets.update_canvas()
             if update_layers == True and not self.workzone_widgets.layers_view == None:
                 self.workzone_widgets.layers_view.create_layers()
+                self.export_widgets.set_checkbox_default_values()
     
 
     def change_current_layer(self, value):
@@ -85,6 +96,10 @@ class Layers:
     def duplicate_layer(self, id):        
         self.images.insert(id, copy(self.images[id]))
         self.construct_image(update_layers=True)
+    
+    def remove_layer(self, id): 
+        self.images.pop(id)
+        self.construct_image(update_layers=True)
 
     def change_all_material_map(self, map_name):
         for image in self.images:
@@ -95,11 +110,7 @@ class Layers:
     def export_final_files(self, selected_files, file_name, destination_folder):
         for s_file in selected_files:
             self.change_all_material_map(s_file)
-            self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + ".jpg")) 
-
-        """ ic(selected_files)
-        ic(file_name)
-        ic(destination_folder) """
+            self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + ".jpg"))
 
 
     def test_images(self):

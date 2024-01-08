@@ -14,6 +14,7 @@ class WorkzoneLayers(ctk.CTkFrame):
 
         self.layers = layers
         self.open_image_window = None
+        self.is_first_generation = True
 
         self.grid(row = 0, column = 3, sticky="nsew", rowspan=3)
         self.columnconfigure(0, weight=1)
@@ -27,6 +28,7 @@ class WorkzoneLayers(ctk.CTkFrame):
 
         self.layers_map_list = ctk.CTkOptionMenu(self, values=self.layers.available_maps, command=lambda value: self.change_current_map(value))
         self.layers_map_list.grid(column=1, row=0, pady=5, sticky="ew")
+        self.layers_map_list.grid_forget()
 
         self.button_add_picture = ctk.CTkButton(self, text="+", command=self.open_image_view, width=48, height=32)
         self.button_add_picture.grid(column=2, row=0, padx=0, pady=0, sticky="nse")
@@ -41,8 +43,17 @@ class WorkzoneLayers(ctk.CTkFrame):
 
     def create_layers(self):
         self.layer_blocks = []
+        for ls_child in self.layer_frame.grid_slaves():
+            ls_child.destroy()
         for key, layer in enumerate(self.layers.images):
             self.layer_blocks.append(WorkzoneLayer(self.layer_frame, self.layers, key))
+        
+        if len(self.layer_blocks) > 0:
+            self.layers_map_list.grid(column=1, row=0, pady=5, sticky="ew")
+            self.layers_map_list.configure(require_redraw=True, values=self.layers.available_maps)
+        if self.is_first_generation:
+            self.layers_map_list.set("color")
+            self.is_first_generation = False
 
     def open_image_view(self):
         images_path = (filedialog.askdirectory(initialdir=f"{curdir}/images"))
@@ -65,7 +76,6 @@ class WorkzoneLayer(ctk.CTkFrame):
         
         self.layers = layers
         self.id = id
-        ic(self.id)
         try:
             if self.id == layers.workzone_widgets.current_layer.get():
                 self.configure(fg_color = LIGHT_GREY) 
@@ -96,7 +106,10 @@ class WorkzoneLayer(ctk.CTkFrame):
         self.thumbnail_label.grid(column=1, row=0, sticky="nsw", padx=20)
 
         self.duplicate_button = ctk.CTkButton(self, text="D", width=28, command= lambda: self.layers.duplicate_layer(self.id))
-        self.duplicate_button.grid(column=3, row=1, padx=5, sticky="e")
+        self.duplicate_button.grid(column=2, row=1, padx=5, sticky="e")
+
+        self.remove_button = ctk.CTkButton(self, text="X", width=28, command= lambda: self.layers.remove_layer(self.id))
+        self.remove_button.grid(column=3, row=1, padx=5, sticky="e")
         
         if self.id != 0:
             self.move_top_button = ctk.CTkButton(self, text="▲", width=28, command= lambda: self.layers.move_layer(self.id, direction= -1))

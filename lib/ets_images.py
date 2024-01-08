@@ -23,8 +23,12 @@ class EtsImage:
 
         self.openImage()
 
-    def openImage(self):
-        self.pil_image = Image.open(self.path)
+    def openImage(self, generaeted_img = None):
+        if generaeted_img == None:
+            self.pil_image = Image.open(self.path).convert("RGB")
+        else:
+            self.pil_image = generaeted_img
+
         self.np_image = np.array(self.pil_image)
     
         self.dtype = self.np_image.dtype
@@ -45,9 +49,19 @@ class EtsImage:
         return self.trimmed_image
     
     def change_material_map(self, map_name):
-        self.path = os.path.join(self.collection["path"], self.collection[map_name])
-        self.openImage()
+        if self.collection[map_name] != None:
+            self.path = os.path.join(self.collection["path"], self.collection[map_name])
+            self.openImage()
+        else:
+            self.generate_image(map_name)
         self.trim_image(self.current_pos_x, self.current_pos_y, self.current_width, self.current_height)
+
+    def generate_image(self, map_name):
+        if map_name == "normal" or map_name == "normal_dx" or map_name == "normal_gl":
+            self.openImage(generaeted_img=Image.new(mode="RGB", size=(self.width, self.height), color=(128,128,255)))
+        else:
+            self.openImage(generaeted_img=Image.new(mode="RGB", size=(self.width, self.height), color=(0,0,0)))
+
 
     def show_image(self, img, name="Show Image"):
         cv2.imshow(name, img)

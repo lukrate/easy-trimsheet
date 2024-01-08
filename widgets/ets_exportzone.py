@@ -11,6 +11,7 @@ class Exportzone(ctk.CTkFrame):
         super().__init__(master, **kwargs)
 
         self.layers = layers
+        self.layers.export_widgets = self
 
         self.file_name = ctk.StringVar(value="")
         self.destination_folder = ctk.StringVar(value="")
