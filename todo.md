@@ -2,6 +2,7 @@
 [X] view different map
 [] update dropdown menu layer - view different map if new map is open and check erro if no map
 [X] move layer
+[X] Zoom and pan Canvas
 [] rotate image
 [] remove layer
 [X] duplicate layer
