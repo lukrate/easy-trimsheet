@@ -17,17 +17,21 @@ class EtsImage:
         self.shape:tuple = None # (w, h, layers)
         self.img_layer:int = None # number of layer in the image
 
+        self.is_rotate = False
+        self.rotation_value = 0
+
         self.pil_image = None
         self.np_image = None
+        self.np_image_rotated = None
         self.trimmed_image = None
 
         self.openImage()
 
-    def openImage(self, generaeted_img = None):
-        if generaeted_img == None:
+    def openImage(self, generated_img = None):
+        if generated_img == None:
             self.pil_image = Image.open(self.path).convert("RGB")
         else:
-            self.pil_image = generaeted_img
+            self.pil_image = generated_img
 
         self.np_image = np.array(self.pil_image)
     
@@ -43,10 +47,28 @@ class EtsImage:
         self.current_pos_y = y
         self.current_height = height
         self.current_width = width
-        self.trimmed_image = self.np_image[y:y + height, x:x + width]
+        if not self.is_rotate:
+            self.trimmed_image = self.np_image[y:y + height, x:x + width]
+        else:
+            self.trimmed_image = self.np_image_rotated[y:y + height, x:x + width]
 
     def get_trimmed_image(self):
         return self.trimmed_image
+    
+    def change_image_rotation(self, value):
+        self.rotation_value = value
+        if value == "0":
+            self.is_rotate = False
+        elif value == "90":
+            self.np_image_rotated = np.rot90(self.np_image)
+            self.is_rotate = True
+        elif value == "180":
+            self.np_image_rotated = np.rot90(self.np_image, 2)
+            self.is_rotate = True
+        elif value == "270":
+            self.np_image_rotated = np.rot90(self.np_image, 3)
+            self.is_rotate = True
+        self.trim_image(self.current_pos_x, self.current_pos_y, self.current_width, self.current_height)
     
     def change_material_map(self, map_name):
         if self.collection[map_name] != None:
@@ -58,9 +80,9 @@ class EtsImage:
 
     def generate_image(self, map_name):
         if map_name == "normal" or map_name == "normal_dx" or map_name == "normal_gl":
-            self.openImage(generaeted_img=Image.new(mode="RGB", size=(self.width, self.height), color=(128,128,255)))
+            self.openImage(generated_img=Image.new(mode="RGB", size=(self.width, self.height), color=(128,128,255)))
         else:
-            self.openImage(generaeted_img=Image.new(mode="RGB", size=(self.width, self.height), color=(0,0,0)))
+            self.openImage(generated_img=Image.new(mode="RGB", size=(self.width, self.height), color=(0,0,0)))
 
 
     def show_image(self, img, name="Show Image"):

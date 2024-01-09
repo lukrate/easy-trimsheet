@@ -24,34 +24,34 @@ class App(ctk.CTk):
         self.columnconfigure(0, weight=1)
         
         #----------------- TABS INIT
-        tabview = ctk.CTkTabview(master=self, anchor="nw")
-        tabview.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
+        self.tabview = ctk.CTkTabview(master=self, anchor="nw")
+        self.tabview.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
         #----------------- TAB WORKSPACE
-        tabview.add("Workspace")  # add tab at the end
-        tabview.tab("Workspace").grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
-        tabview.tab("Workspace").rowconfigure(0, weight=1)
-        tabview.tab("Workspace").columnconfigure(0, weight=1)
+        self.tabview.add("Workspace")  # add tab at the end
+        self.tabview.tab("Workspace").grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
+        self.tabview.tab("Workspace").rowconfigure(0, weight=1)
+        self.tabview.tab("Workspace").columnconfigure(0, weight=1)
 
-        tab_workzone = Workzone(master = tabview.tab("Workspace"), layers=self.layers)        
+        tab_workzone = Workzone(master = self.tabview.tab("Workspace"), layers=self.layers)        
         tab_workzone.image=self.layers.stacked_trim
         tab_workzone.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
         #----------------- TAB LAYERS        
-        tabview.add("Layers")  # add tab at the end
+        #self.tabview.add("Layers")  # add tab at the end
 
         #----------------- TAB EXPORT
-        tabview.add("Export")  # add tab at the end
-        tabview.tab("Export").grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
-        tabview.tab("Export").rowconfigure(0, weight=1)
-        tabview.tab("Export").columnconfigure(0, weight=1)
+        self.tabview.add("Export")  # add tab at the end
+        self.tabview.tab("Export").grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
+        self.tabview.tab("Export").rowconfigure(0, weight=1)
+        self.tabview.tab("Export").columnconfigure(0, weight=1)
 
-        tab_workzone = Exportzone(master = tabview.tab("Export"), layers=self.layers)
+        tab_workzone = Exportzone(master = self.tabview.tab("Export"), layers=self.layers)
         tab_workzone.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
         #----------------- TAB SETTTINGS
-        tabview.add("Settings")  # add tab at the end
-        tabview.set("Workspace")  # set currently visible tab
+        self.tabview.add("Settings")  # add tab at the end
+        self.tabview.set("Export")  # set currently visible tab
 
         
 

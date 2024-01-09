@@ -3,7 +3,7 @@ IMAGE_SIZE_DEFAULT = 2048
 ROTATE_DEFAULT = 0
 
 ZOOM_DEFAULT = 0
-FLIP_OPTIONS = ["None", "X", "Y", "Both"]
+ROTATIONS_OPTIONS = ["0", "90", "180", "270"]
 BRIGHTNESS_DEFAULT = 1
 
 BACKGROUND_COLOR = "#2b2b2b"
@@ -28,3 +28,7 @@ FILE_NAME_PATTERNS = {
     "emission": ["_emit_", "_emiss_", "_emission", "emission"],
     "bump":["_bump_", "_bump", "bump"]
 }
+
+GREYSCALE_MAP = ["roughness", "displacement", "metalness", "ao", "bump"]
+
+FILE_FORMATS = [".jpg", ".png", ".webp"]

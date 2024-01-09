@@ -3,13 +3,13 @@
 [X] update dropdown menu layer - view different map if new map is open and check erro if no map
 [X] move layer
 [X] Zoom and pan Canvas
-[] rotate image
+[X] rotate image
+[X] choose save format
 [X] remove layer
 [X] duplicate layer
-[] save and load
-[] choose save format
-[] settings edit-save
 [] project size
+[] save and load
+[] settings edit-save
 [] generate ARM map on export
 [] generate id map
 

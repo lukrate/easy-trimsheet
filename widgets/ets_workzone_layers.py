@@ -105,6 +105,9 @@ class WorkzoneLayer(ctk.CTkFrame):
         self.thumbnail_label = ctk.CTkLabel(self, text=f"Layer {id}")
         self.thumbnail_label.grid(column=1, row=0, sticky="nsw", padx=20)
 
+        self.duplicate_button = ctk.CTkOptionMenu(self, values=ROTATIONS_OPTIONS, command=lambda value: self.layers.change_image_rotation(value, self.id))
+        self.duplicate_button.grid(column=1, row=1, padx=5, sticky="e")
+        
         self.duplicate_button = ctk.CTkButton(self, text="D", width=28, command= lambda: self.layers.duplicate_layer(self.id))
         self.duplicate_button.grid(column=2, row=1, padx=5, sticky="e")
 

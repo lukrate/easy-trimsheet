@@ -6,6 +6,8 @@ from ets_images import EtsImage
 from utils import get_image_dictionnary
 from icecream import ic
 from copy import copy
+from CTkMessagebox import CTkMessagebox
+import subprocess
 
 class Layers:
     def __init__(self):
@@ -106,11 +108,49 @@ class Layers:
             image.change_material_map(map_name)
         self.construct_image(update_layers=True)
 
+    def change_image_rotation(self, value, id):
+        self.images[id].change_image_rotation(value)
+        self.construct_image(update_layers=False)
 
-    def export_final_files(self, selected_files, file_name, destination_folder):
+
+    def export_final_files(self, selected_files, file_name, destination_folder, format, options):
+        ic(format)
+        ic(options)
         for s_file in selected_files:
             self.change_all_material_map(s_file)
-            self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + ".jpg"))
+            ic(s_file)
+            if s_file in GREYSCALE_MAP:
+                self.stacked_trim = self.stacked_trim.convert("L")
+            if format == ".jpg":
+                self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
+                    quality=options["quality"],
+                    optimize=options["optimize"]
+                )
+            elif format == ".png":
+                self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
+                    compression=options["compression"],
+                    optimize=options["optimize"]
+                )
+            elif format == ".webp":
+                self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
+                    quality=options["quality"],
+                    lossless=options["lossless"]
+                )
+            else:
+                break
+        
+        self.open_render_compete_box(destination_folder)
+
+    def open_render_compete_box(self, destination_folder):
+        box = CTkMessagebox(message="Rendering is complete!",
+                  icon="check", option_1="OK", option_2="Open Folder")
+        
+        resp = box.get()
+
+        if resp == "Open Folder":
+            """ my_str = f'start %windir%\explorer.exe "{destination_folder}"'
+            ic(my_str)
+            subprocess.Popen(my_str) """
 
 
     def test_images(self):
