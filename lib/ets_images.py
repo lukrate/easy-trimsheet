@@ -76,6 +76,10 @@ class EtsImage:
             self.openImage()
         else:
             self.generate_image(map_name)
+        if self.is_rotate:
+            self.change_image_rotation(self.rotation_value)
+            
+
         self.trim_image(self.current_pos_x, self.current_pos_y, self.current_width, self.current_height)
 
     def generate_image(self, map_name):

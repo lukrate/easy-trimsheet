@@ -45,8 +45,11 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.layer_blocks = []
         for ls_child in self.layer_frame.grid_slaves():
             ls_child.destroy()
-        for key, layer in enumerate(self.layers.images):
-            self.layer_blocks.append(WorkzoneLayer(self.layer_frame, self.layers, key))
+        for key, image in enumerate(self.layers.images):
+            new_layer = WorkzoneLayer(self.layer_frame, self.layers, key)
+            new_layer.rotation_menu.set(image.rotation_value)
+            self.layer_blocks.append(new_layer)
+
         
         if len(self.layer_blocks) > 0:
             self.layers_map_list.grid(column=1, row=0, pady=5, sticky="ew")
@@ -105,8 +108,8 @@ class WorkzoneLayer(ctk.CTkFrame):
         self.thumbnail_label = ctk.CTkLabel(self, text=f"Layer {id}")
         self.thumbnail_label.grid(column=1, row=0, sticky="nsw", padx=20)
 
-        self.duplicate_button = ctk.CTkOptionMenu(self, values=ROTATIONS_OPTIONS, command=lambda value: self.layers.change_image_rotation(value, self.id))
-        self.duplicate_button.grid(column=1, row=1, padx=5, sticky="e")
+        self.rotation_menu = ctk.CTkOptionMenu(self, values=ROTATIONS_OPTIONS, command=lambda value: self.layers.change_image_rotation(value, self.id))
+        self.rotation_menu.grid(column=1, row=1, padx=5, sticky="e")
         
         self.duplicate_button = ctk.CTkButton(self, text="D", width=28, command= lambda: self.layers.duplicate_layer(self.id))
         self.duplicate_button.grid(column=2, row=1, padx=5, sticky="e")

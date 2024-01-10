@@ -3,26 +3,35 @@ from lib.ets_layers import Layers
 from lib.ets_settings import *
 from widgets.ets_workzone import Workzone
 from widgets.ets_exportzone import Exportzone
+from widgets.ets_opening import Opening
 # list of events
 # pythontutorial.net/tkinter/tkinter-event-binding
 
 #window
 class App(ctk.CTk):
-    def __init__(self):
-        
+    def __init__(self):        
         #setup
         super().__init__()
         ctk.set_appearance_mode("dark")
         self.geometry("1200x800")
         self.title("Easy Trimsheet")
         self.minsize(800, 600)
-        self.bind_all("<Button-1>", lambda event: event.widget.focus_set())
+        self.bind_all("<Button-1>", lambda event: self.focus_on_view(event))
 
         self.layers = Layers()
 
+
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
+
+        #first_view = Opening(self, self.construct_tabs)
+        self.construct_tabs()
         
+
+        self.mainloop()
+
+
+    def construct_tabs(self):
         #----------------- TABS INIT
         self.tabview = ctk.CTkTabview(master=self, anchor="nw")
         self.tabview.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
@@ -51,14 +60,16 @@ class App(ctk.CTk):
 
         #----------------- TAB SETTTINGS
         self.tabview.add("Settings")  # add tab at the end
-        self.tabview.set("Export")  # set currently visible tab
+        self.tabview.set("Workspace")  # set currently visible tab
+        
 
         
 
-        #layout
-
-        self.mainloop()
-
+    def focus_on_view(self, event):
+        try:
+            event.widget.focus_set()
+        except AttributeError:
+            pass
 
 if __name__ == "__main__":
     App()
