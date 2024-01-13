@@ -4,6 +4,7 @@ from lib.ets_settings import *
 from widgets.ets_workzone import Workzone
 from widgets.ets_exportzone import Exportzone
 from widgets.ets_opening import Opening
+from icecream import ic
 # list of events
 # pythontutorial.net/tkinter/tkinter-event-binding
 
@@ -18,18 +19,22 @@ class App(ctk.CTk):
         self.minsize(800, 600)
         self.bind_all("<Button-1>", lambda event: self.focus_on_view(event))
 
-        self.layers = Layers()
-
 
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
-        #first_view = Opening(self, self.construct_tabs)
-        self.construct_tabs()
+        self.first_view = Opening(self, self.init_app_func)
+        #self.construct_tabs()
         
 
         self.mainloop()
 
+    def init_app_func(self, size=None, path=None):
+        ic("init")
+        self.first_view.pack_forget()
+        if path == None:
+            self.layers = Layers(size)
+            self.construct_tabs()
 
     def construct_tabs(self):
         #----------------- TABS INIT

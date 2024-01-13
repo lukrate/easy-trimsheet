@@ -10,7 +10,7 @@ class Workzone(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
         super().__init__(master, **kwargs)
 
-        self.image = Image.new(mode="RGB", size=(IMAGE_SIZE_DEFAULT, IMAGE_SIZE_DEFAULT))
+        self.image = Image.new(mode="RGB", size=(layers.size, layers.size))
         self.image_ratio = self.image.size[0] / self.image.size[1]
 
         self.canvas_height = 0
@@ -159,7 +159,7 @@ class Workzone(ctk.CTkFrame):
         self.canvas.event_generate("<Configure>")
 
     def sliders_update_current_trim(self, scale, position):
-        self.layers.images[self.current_layer.get()].trim_image(0, position, 2048, scale)
+        self.layers.images[self.current_layer.get()].trim_image(0, position, self.layers.size, scale)
         self.layers.construct_image()
 
     def update_canvas(self):

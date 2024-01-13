@@ -9,9 +9,9 @@ from copy import copy
 from CTkMessagebox import CTkMessagebox
 import subprocess
 
-class Layers:
-    def __init__(self):
-        self.size = IMAGE_SIZE_DEFAULT
+class Layers():
+    def __init__(self, size=IMAGE_SIZE_DEFAULT):
+        self.size = size
         self.background = self.generate_background(self.size)
  
         self.images = [] #collections of images
@@ -19,7 +19,7 @@ class Layers:
 
         self.stacked_trim_array = [] #np array of images trimmed
         self.stacked_trim = None #final image
-        self.free_space = IMAGE_SIZE_DEFAULT #freespace under existing images
+        self.free_space = size #freespace under existing images
 
         self.workzone_widgets = None
         self.export_widgets = None
@@ -36,16 +36,16 @@ class Layers:
     def add_new_image(self, images_dict:dict = None, height = None):
         height = self.get_free_space() if height == None else height
         if not images_dict == None:
-            self.images.append(EtsImage(images_dict))
+            self.images.append(EtsImage(images_dict, self.size))
             self.get_available_maps()
-            self.images[-1].trim_image(0,0, height=height)
+            self.images[-1].trim_image(0,0, height=height, width=self.size)
             self.construct_image(update_layers=True)
 
     def get_free_space(self):
         try:
-            return IMAGE_SIZE_DEFAULT - self.stacked_trim_array.shape[0]
+            return self.size - self.stacked_trim_array.shape[0]
         except AttributeError:
-            return IMAGE_SIZE_DEFAULT
+            return self.size
     
     def get_available_maps(self):
         a_maps = []

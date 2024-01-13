@@ -7,11 +7,12 @@ import os
 
 class EtsImage:
 
-    def __init__(self, images_dict):
+    def __init__(self, images_dict, project_size):
         self.collection = images_dict
         #ic(self.collection)
         self.path = os.path.join(self.collection["path"], self.collection["color"])
         self.width = None
+        self.project_size = project_size
         self.height = None
         self.dtype = None
         self.shape:tuple = None # (w, h, layers)
@@ -34,6 +35,13 @@ class EtsImage:
             self.pil_image = generated_img
 
         self.np_image = np.array(self.pil_image)
+
+        ic(self.np_image.shape[0], self.project_size)
+        if self.np_image.shape[0] < self.project_size:
+            new_np_image = self.np_image
+            for i in range(0, int(self.project_size / self.np_image.shape[0])):
+                new_np_image = np.hstack((new_np_image, self.np_image))
+            self.np_image = new_np_image
     
         self.dtype = self.np_image.dtype
         self.shape = self.np_image.shape
