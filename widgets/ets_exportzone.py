@@ -15,6 +15,7 @@ class Exportzone(ctk.CTkFrame):
 
         self.file_name = ctk.StringVar(value="")
         self.destination_folder = ctk.StringVar(value="")
+        self.progressbar_value = ctk.DoubleVar(value=0.0)
         self.format = ".jpg"
         
         self.columnconfigure(0, weight=1)
@@ -26,7 +27,8 @@ class Exportzone(ctk.CTkFrame):
         self.rowconfigure(1, weight=2)
         self.rowconfigure(2, weight=2)
         self.rowconfigure(3, weight=1)
-        self.rowconfigure(4, weight=180)
+        self.rowconfigure(4, weight=1)
+        self.rowconfigure(5, weight=180)
 
         # --------- EXPORT CHECKBOX -------- #
 
@@ -87,6 +89,9 @@ class Exportzone(ctk.CTkFrame):
             command=self.export_files
         )
         self.export_btn.grid(column=1, row=3, columnspan=3, pady=50, sticky="nsew")
+
+        self.progressbar = ctk.CTkProgressBar(self, progress_color="teal", orientation="horizontal", variable=self.progressbar_value)
+        self.progressbar.grid(column=1, row=4, columnspan=3, pady=5, sticky="nsew")
 
     def change_format_options(self, value):
         self.options_frame.grid_forget()

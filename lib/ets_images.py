@@ -2,6 +2,7 @@ from ets_settings import *
 from PIL import Image
 import cv2
 import numpy as np
+from copy import copy
 from icecream import ic
 import os
 
@@ -9,14 +10,12 @@ class EtsImage:
 
     def __init__(self, images_dict, project_size):
         self.collection = images_dict
-        #ic(self.collection)
         self.path = os.path.join(self.collection["path"], self.collection["color"])
         self.width = None
         self.project_size = project_size
         self.height = None
         self.dtype = None
         self.shape:tuple = None # (w, h, layers)
-        self.img_layer:int = None # number of layer in the image
 
         self.is_rotate = False
         self.rotation_value = 0
@@ -36,18 +35,16 @@ class EtsImage:
 
         self.np_image = np.array(self.pil_image)
 
-        ic(self.np_image.shape[0], self.project_size)
-        if self.np_image.shape[0] < self.project_size:
-            new_np_image = self.np_image
-            for i in range(0, int(self.project_size / self.np_image.shape[0])):
-                new_np_image = np.hstack((new_np_image, self.np_image))
-            self.np_image = new_np_image
+
+        self.original_np_image = self.np_image.copy()
+
+        self.np_image = self.get_horizonatal_stack(self.np_image)
+        self.np_image = self.get_downscaled_image(self.np_image)
     
         self.dtype = self.np_image.dtype
         self.shape = self.np_image.shape
         self.width = self.shape[0]
         self.height = self.shape[1]
-        #self.layer = self.shape[2]
         self.image_ratio = self.width / self.height
 
     def trim_image(self, x, y, width=IMAGE_SIZE_DEFAULT, height=IMAGE_SIZE_DEFAULT):
@@ -68,14 +65,18 @@ class EtsImage:
         if value == "0":
             self.is_rotate = False
         elif value == "90":
-            self.np_image_rotated = np.rot90(self.np_image)
+            self.np_image_rotated = np.rot90(self.original_np_image)
             self.is_rotate = True
         elif value == "180":
-            self.np_image_rotated = np.rot90(self.np_image, 2)
+            self.np_image_rotated = np.rot90(self.original_np_image, 2)
             self.is_rotate = True
         elif value == "270":
-            self.np_image_rotated = np.rot90(self.np_image, 3)
+            self.np_image_rotated = np.rot90(self.original_np_image, 3)
             self.is_rotate = True
+
+        self.np_image_rotated = self.get_horizonatal_stack(self.np_image_rotated)
+        self.np_image_rotated = self.get_downscaled_image(self.np_image_rotated)
+        
         self.trim_image(self.current_pos_x, self.current_pos_y, self.current_width, self.current_height)
     
     def change_material_map(self, map_name):
@@ -83,19 +84,34 @@ class EtsImage:
             self.path = os.path.join(self.collection["path"], self.collection[map_name])
             self.openImage()
         else:
-            self.generate_image(map_name)
+            self.generate_missing_map(map_name)
         if self.is_rotate:
             self.change_image_rotation(self.rotation_value)
             
 
         self.trim_image(self.current_pos_x, self.current_pos_y, self.current_width, self.current_height)
 
-    def generate_image(self, map_name):
+    def generate_missing_map(self, map_name):
         if map_name == "normal" or map_name == "normal_dx" or map_name == "normal_gl":
             self.openImage(generated_img=Image.new(mode="RGB", size=(self.width, self.height), color=(128,128,255)))
         else:
             self.openImage(generated_img=Image.new(mode="RGB", size=(self.width, self.height), color=(0,0,0)))
 
+    def get_horizonatal_stack(self, np_image):
+        if np_image.shape[0] < self.project_size:
+            hstacked_np_image = np_image
+            for i in range(0, int(self.project_size / np_image.shape[0])):
+                hstacked_np_image = np.hstack((hstacked_np_image, np_image))
+            return hstacked_np_image
+        else:
+            return np_image
+        
+    def get_downscaled_image(self, np_image):
+        if np_image.shape[0] > self.project_size:
+            value = int(np_image.shape[0] / self.project_size)
+            return np_image[::value, ::value]
+        else:
+            return np_image
 
     def show_image(self, img, name="Show Image"):
         cv2.imshow(name, img)

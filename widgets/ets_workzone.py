@@ -86,14 +86,15 @@ class Workzone(ctk.CTkFrame):
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
         self.slider_trim.grid(row=2, column=2, padx=10, pady=20, sticky="ns")
         #endregion view
-
+        
+    
         # ------------- LAYERS --------------
 
         self.layers_view = WorkzoneLayers(self, self.layers)
 
-        # ------------- DEFAULT IMAGE CREATION --------------
-
         self.layers.workzone_widgets = self
+
+        
 
 
     def resize_image(self, event):
@@ -158,8 +159,8 @@ class Workzone(ctk.CTkFrame):
         self.zoom_level = 1
         self.canvas.event_generate("<Configure>")
 
-    def sliders_update_current_trim(self, scale, position):
-        self.layers.images[self.current_layer.get()].trim_image(0, position, self.layers.size, scale)
+    def sliders_update_current_trim(self, height, position):
+        self.layers.images[self.current_layer.get()].trim_image(0, position, self.layers.size, height)
         self.layers.construct_image()
 
     def update_canvas(self):

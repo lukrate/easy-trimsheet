@@ -24,8 +24,7 @@ class Layers():
         self.workzone_widgets = None
         self.export_widgets = None
         
-        self.test_images()
-        #ic(self.get_free_space())
+        #self.test_images()
 
 
 
@@ -33,12 +32,12 @@ class Layers():
         img = Image.new(mode="RGB", size=(size, size))
         return img
     
-    def add_new_image(self, images_dict:dict = None, height = None):
+    def add_new_image(self, images_dict:dict = None, height = None, posx = 0, posy = 0):
         height = self.get_free_space() if height == None else height
         if not images_dict == None:
             self.images.append(EtsImage(images_dict, self.size))
             self.get_available_maps()
-            self.images[-1].trim_image(0,0, height=height, width=self.size)
+            self.images[-1].trim_image(posx, posy, height=height, width=self.size)
             self.construct_image(update_layers=True)
 
     def get_free_space(self):
@@ -114,11 +113,14 @@ class Layers():
 
 
     def export_final_files(self, selected_files, file_name, destination_folder, format, options):
-        ic(format)
-        ic(options)
+
+        i = 0
         for s_file in selected_files:
             self.change_all_material_map(s_file)
-            ic(s_file)
+
+            i += 1
+            self.export_widgets.progressbar_value.set(i / len(selected_files))
+
             if s_file in GREYSCALE_MAP:
                 self.stacked_trim = self.stacked_trim.convert("L")
             if format == ".jpg":
@@ -139,19 +141,18 @@ class Layers():
             else:
                 break
         
-        self.open_render_compete_box(destination_folder)
+        self.open_render_complete_box(destination_folder)
 
-    def open_render_compete_box(self, destination_folder):
+    def open_render_complete_box(self, destination_folder):
         box = CTkMessagebox(message="Rendering is complete!",
                   icon="check", option_1="OK", option_2="Open Folder")
         
         resp = box.get()
 
         if resp == "Open Folder":
-            """ my_str = f'start %windir%\explorer.exe "{destination_folder}"'
-            ic(my_str)
-            subprocess.Popen(my_str) """
-
+            win_dir = os.path.normpath(destination_folder)
+            subprocess.Popen('explorer "%s"' %win_dir)
+        self.export_widgets.progressbar_value.set(0.0)
 
     def test_images(self):
         images_dict = get_image_dictionnary(os.path.join(os.getcwd(), 'images', 'RoofingTiles014A', "2k"))

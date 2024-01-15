@@ -1,6 +1,9 @@
 import customtkinter as ctk
+import json
+from tkinter import filedialog
 from lib.ets_layers import Layers
 from lib.ets_settings import *
+from lib.utils import get_save_project_data
 from widgets.ets_workzone import Workzone
 from widgets.ets_exportzone import Exportzone
 from widgets.ets_opening import Opening
@@ -30,12 +33,23 @@ class App(ctk.CTk):
         self.mainloop()
 
     def init_app_func(self, size=None, path=None):
-        ic("init")
-        self.first_view.pack_forget()
         if path == None:
             self.layers = Layers(size)
-            self.construct_tabs()
+        elif path != None:
+            with open(path, 'r') as openfile:
+                loaded_data = json.load(openfile)
+            self.layers = Layers(loaded_data["size"])
+            for image in loaded_data["images"]:
+                self.layers.add_new_image(images_dict = image["collection"], height=image["current_height"], posx=image["current_pos_x"])
+                self.layers.images[-1].is_rotate = image["is_rotate"]
+                if image["is_rotate"]:
+                    self.layers.images[-1].rotation_value = image["rotation_value"]
+                    self.layers.images[-1].change_image_rotation(image["rotation_value"])
+                    
 
+        self.first_view.pack_forget()
+        self.construct_tabs()
+            
     def construct_tabs(self):
         #----------------- TABS INIT
         self.tabview = ctk.CTkTabview(master=self, anchor="nw")
@@ -64,10 +78,20 @@ class App(ctk.CTk):
         tab_workzone.grid(column=0, row=0, padx=0, pady=0, sticky="nsew")
 
         #----------------- TAB SETTTINGS
-        self.tabview.add("Settings")  # add tab at the end
+        #self.tabview.add("Settings")  # add tab at the end
         self.tabview.set("Workspace")  # set currently visible tab
-        
 
+        # ------------- SAVE BUTTON --------------
+        self.save_button = ctk.CTkButton(self, text="Save project", text_color=WHITE, fg_color="transparent", width=40, height=30, command=self.save_project)
+        self.save_button.place(relx = 0.18, rely = 0.01, anchor = "nw")
+
+        
+    def save_project(self):
+        formats = [("Easy Trim Sheet", ".ets")]
+        file = filedialog.asksaveasfile(filetypes=formats, defaultextension=formats)
+        file_content = json.dumps(get_save_project_data(self.layers))
+        file.write(file_content)
+        file.close()
         
 
     def focus_on_view(self, event):

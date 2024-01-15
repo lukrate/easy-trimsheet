@@ -7,11 +7,14 @@
 [X] choose save format
 [X] remove layer
 [X] duplicate layer
-[] project size
+[X] project size
+
+[X] bug rotation correction
 [] save and load
-[] settings edit-save
-[] generate ARM map on export
-[] generate id map
+
+[] settings edit-save ??
+[] generate ARM map on export ??
+[] generate id map ??
 
 Multidimensional image processing 
 https://docs.scipy.org/doc/scipy/reference/ndimage.html

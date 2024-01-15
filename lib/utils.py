@@ -48,6 +48,23 @@ def get_image_dictionnary(path):
     return organized_images
 
 
+def get_save_project_data(layers):
+    data = {}
+    data["size"] = layers.size
+    data["images"] = []
+    for key, image in enumerate(layers.images):
+        layer_name = "layer_" + str(key)
+        layer = {}
+        layer["collection"] = image.collection
+        layer["current_pos_x"] = image.current_pos_x
+        layer["current_pos_y"] = image.current_pos_y
+        layer["current_height"] = image.current_height
+        layer["current_width"] = image.current_width
+        layer["is_rotate"] = image.is_rotate
+        layer["rotation_value"] = image.rotation_value
+        
+        data["images"].append(layer)
 
+    return data
     
 

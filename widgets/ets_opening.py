@@ -22,22 +22,21 @@ class Opening(ctk.CTkFrame):
         self.button_start_new = ctk.CTkButton(self, text="New Project", command=self.start_new_project)
         self.button_start_new.pack(pady=12, padx=12)
 
-        self.button_load_project = ctk.CTkButton(self, text="Load Project (coming soon)", command=self.open_dialog, state="disabled")
+        self.button_load_project = ctk.CTkButton(self, text="Load Project", command=self.open_dialog, state="enabled")
         self.button_load_project.pack(pady=12, padx=12)
 
     def open_dialog(self):
         try:
-            path = filedialog.askopenfile(initialdir=f"{curdir}/images").name
-            self.init_app_func(path)
-            #self.grid_remove()
+            path = filedialog.askopenfile(initialdir=f"{curdir}/saved_projects").name
+            self.init_app_func(path=path)
+            
         except AttributeError:
             path = None
             pass
     
     def remove_widget(self):
-        self.grid_remove()
+        self.pack_forget()
 
     
     def start_new_project(self):
         self.init_app_func(size=int(self.project_size.get()))
-        ic(self.project_size.get())
