@@ -59,7 +59,8 @@ class WorkzoneLayers(ctk.CTkFrame):
             self.is_first_generation = False
 
     def open_image_view(self):
-        images_path = (filedialog.askdirectory(initialdir=f"{curdir}/images"))
+        images_path = (filedialog.askopenfile(initialdir=f"{curdir}/images"))
+        images_path = os.path.split(images_path.name)[0]
         try:
             self.layers.add_new_image(get_image_dictionnary(images_path))
         except TypeError:
