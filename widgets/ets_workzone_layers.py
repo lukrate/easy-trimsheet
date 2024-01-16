@@ -68,13 +68,6 @@ class WorkzoneLayers(ctk.CTkFrame):
     
     def change_current_map(self, map_name):
         self.layers.change_all_material_map(map_name)
-        
-
-        """ if self.open_image_window is None or not self.open_image_window.winfo_exists():
-            self.open_image_window = OpenImageView(layers=self.layers)  # create window if its None or destroyed
-            self.open_image_window.focus()  # if window exists focus it
-        else:
-            self.open_image_window.focus()  # if window exists focus it """
 
 
 class WorkzoneLayer(ctk.CTkFrame):
