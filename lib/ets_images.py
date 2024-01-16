@@ -35,7 +35,6 @@ class EtsImage:
 
         self.np_image = np.array(self.pil_image)
 
-
         self.original_np_image = self.np_image.copy()
 
         self.np_image = self.get_horizonatal_stack(self.np_image)

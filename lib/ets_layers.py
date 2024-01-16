@@ -38,7 +38,12 @@ class Layers():
             self.images.append(EtsImage(images_dict, self.size))
             self.get_available_maps()
             self.images[-1].trim_image(posx, posy, height=height, width=self.size)
-            self.construct_image(update_layers=True)
+            try:
+                self.construct_image(update_layers=False)
+                self.change_current_layer(len(self.images)-1)
+            except AttributeError:
+                self.construct_image(update_layers=True)
+                
 
     def get_free_space(self):
         try:
@@ -51,9 +56,13 @@ class Layers():
         for key, value in FILE_NAME_PATTERNS.items():
             if key != "normal":
                 for img in self.images:
-                    if img.collection[key] != None:
-                        a_maps.append(key)
-                        break
+                    try:
+                        if img.collection[key] != None:
+                            a_maps.append(key)
+                            break
+                    except KeyError:
+                        continue
+                    
         self.available_maps = a_maps
         return self.available_maps
 
@@ -66,6 +75,7 @@ class Layers():
                 final_img_array = np.vstack((final_img_array, v.trimmed_image))
         
         final_img = self.background.copy()
+        
         try:
             final_img.paste(Image.fromarray(final_img_array))
             self.stacked_trim_array = final_img_array

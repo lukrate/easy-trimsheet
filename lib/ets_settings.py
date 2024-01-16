@@ -1,3 +1,6 @@
+from PIL import Image
+import customtkinter as ctk
+import os
 
 IMAGE_SIZE_DEFAULT = 2048
 IMAGE_SIZE_OPTIONS = ["256", "512", "1024", "2048", "4096", "8192"]
@@ -27,9 +30,26 @@ FILE_NAME_PATTERNS = {
     "normal_dx": ["_dx_", "dx", "directx"],
     "ao": ["_ao_", "_ambientocclusion", "ambientocclusion", "ambient", "occlusion"],
     "emission": ["_emit_", "_emiss_", "_emission", "emission"],
+    "specular": ["_spec_", "_specular", "specular"],
     "bump":["_bump_", "_bump", "bump"]
 }
 
 GREYSCALE_MAP = ["roughness", "displacement", "metalness", "ao", "bump"]
 
 FILE_FORMATS = [".jpg", ".png", ".webp"]
+
+
+ICON_PLUS_PATH = os.path.join(os.path.curdir, "lib", "icon", "plus.png")
+PLUS_BUTTON = ctk.CTkImage(light_image=Image.open(ICON_PLUS_PATH),
+                                  dark_image=Image.open(ICON_PLUS_PATH),
+                                  size=(16, 16))
+
+ICON_CLOSE_PATH = os.path.join(os.path.curdir, "lib", "icon", "close.png")
+CLOSE_BUTTON = ctk.CTkImage(light_image=Image.open(ICON_CLOSE_PATH ),
+                                  dark_image=Image.open(ICON_CLOSE_PATH ),
+                                  size=(14, 14))
+
+ICON_DUPLICATE_PATH = os.path.join(os.path.curdir, "lib", "icon", "duplicate.png")
+DUPLICATE_BUTTON = ctk.CTkImage(light_image=Image.open(ICON_DUPLICATE_PATH ),
+                                  dark_image=Image.open(ICON_DUPLICATE_PATH ),
+                                  size=(16, 16))

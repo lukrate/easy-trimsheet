@@ -3,6 +3,7 @@ from tkinter import filedialog, Canvas
 from os import curdir
 from lib.ets_settings import *
 from icecream import ic
+from CTkMessagebox import CTkMessagebox
 
 
 class Opening(ctk.CTkFrame):
@@ -22,7 +23,7 @@ class Opening(ctk.CTkFrame):
         self.button_start_new = ctk.CTkButton(self, text="New Project", command=self.start_new_project)
         self.button_start_new.pack(pady=12, padx=12)
 
-        self.button_load_project = ctk.CTkButton(self, text="Load Project", command=self.open_dialog, state="enabled")
+        self.button_load_project = ctk.CTkButton(self, text="Load Project", command=self.open_dialog)
         self.button_load_project.pack(pady=12, padx=12)
 
     def open_dialog(self):
@@ -30,8 +31,9 @@ class Opening(ctk.CTkFrame):
             path = filedialog.askopenfile(initialdir=f"{curdir}/saved_projects").name
             self.init_app_func(path=path)
             
-        except AttributeError:
+        except (AttributeError, FileNotFoundError) as e:
             path = None
+            CTkMessagebox(message=f"{e.args[1]}", title=f"{e.args[1]}", icon="warning")
             pass
     
     def remove_widget(self):

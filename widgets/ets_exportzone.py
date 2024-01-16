@@ -122,9 +122,12 @@ class Exportzone(ctk.CTkFrame):
         for key, child in self.export_options_frame.children.items():
             if isinstance(child, ctk.CTkCheckBox):
                 for img in self.layers.images:
-                    if img.collection[child.cget("text")] != None:
-                        child.select()
-                        break
+                    try:
+                        if img.collection[child.cget("text")] != None:
+                            child.select()
+                            break
+                    except KeyError:
+                        continue
 
     def get_checkbox_true_values(self):
         true_values = []

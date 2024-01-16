@@ -18,12 +18,15 @@ class Workzone(ctk.CTkFrame):
         self.offset_x = 0
         self.offset_y = 0
         self.zoom_level = 1
+        
+        self.layers = layers
 
         self.current_layer = ctk.IntVar(value=0)
-        self.current_trim_h = ctk.IntVar(value = 350)
+        self.current_trim_h = ctk.IntVar(value = self.layers.size)
         self.current_pos_h = ctk.IntVar(value = 0)
 
-        self.layers = layers
+        self.max_trim_h = ctk.IntVar(value = self.layers.size)
+        self.max_pos_h = ctk.IntVar(value = self.layers.size)
         
         #region view
         self.columnconfigure(0, weight=50)
@@ -61,7 +64,7 @@ class Workzone(ctk.CTkFrame):
 
         self.slider_position = ctk.CTkSlider(
             self, 
-            from_=10, to=2048, 
+            from_=0, to=2048, 
             orientation="vertical", 
             variable=self.current_pos_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
@@ -80,7 +83,7 @@ class Workzone(ctk.CTkFrame):
         self.input_trim.grid(row=1, column=2, padx=20, pady=0, sticky="ew")
         self.slider_trim = ctk.CTkSlider(
             self,
-            from_=10, to=2048,
+            from_=0, to=self.max_trim_h.get(),
             orientation="vertical",
             variable=self.current_trim_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
@@ -161,6 +164,7 @@ class Workzone(ctk.CTkFrame):
 
     def sliders_update_current_trim(self, height, position):
         self.layers.images[self.current_layer.get()].trim_image(0, position, self.layers.size, height)
+        self.max_trim_h.set(self.layers.images[self.current_layer.get()].height - position)
         self.layers.construct_image()
 
     def update_canvas(self):

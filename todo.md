@@ -10,7 +10,7 @@
 [X] project size
 
 [X] bug rotation correction
-[] save and load
+[X] save and load
 
 [] settings edit-save ??
 [] generate ARM map on export ??

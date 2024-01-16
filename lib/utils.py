@@ -9,7 +9,10 @@ img_path_3 = "D:\Python\easytrimsheet\images\OfficeCeiling005\\2k"
 
 
 def get_files_in_folder(path):
-    return [f for f in listdir(path) if isfile(join(path, f))]
+    try:
+        return [f for f in listdir(path) if isfile(join(path, f))]
+    except FileNotFoundError:
+        pass
 
 
 def get_image_dictionnary(path):
