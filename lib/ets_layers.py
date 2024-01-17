@@ -7,6 +7,7 @@ from utils import get_image_dictionnary
 from icecream import ic
 from copy import copy
 from CTkMessagebox import CTkMessagebox
+from random import randint
 
 import threading as th
 import subprocess
@@ -80,6 +81,7 @@ class Layers():
 
     def construct_image(self, update_layers = False):
         final_img_array = None
+        
         for k,v in enumerate(self.images):
             if k == 0:
                 final_img_array = v.trimmed_image
@@ -97,13 +99,11 @@ class Layers():
         self.stacked_trim = final_img
         self.free_space = self.get_free_space()
         
-
         if not self.workzone_widgets == None:
             self.workzone_widgets.update_canvas()
             if update_layers == True and not self.workzone_widgets.layers_view == None:
                 self.workzone_widgets.layers_view.create_layers()
-                self.export_widgets.set_checkbox_default_values()
-    
+                self.export_widgets.set_checkbox_default_values() 
 
     def change_current_layer(self, value):
         value = int(value)
@@ -133,8 +133,17 @@ class Layers():
         self.images[id].change_image_rotation(value)
         self.construct_image(update_layers=False)
 
-    def export_final_files(self, selected_files, file_name, destination_folder, format, options):
+    def export_final_files(self, selected_files, file_name, destination_folder, format, options, generate_arm, genereate_id):
+        
         def render_threaded():
+            ic(generate_arm, genereate_id)
+            
+            ao_map = None
+            roughnes_map = None
+            metalness_map = None
+
+            first_map_type = copy(self.current_map_type)
+
             i = 0
             for s_file in selected_files:
                 self.change_all_material_map(s_file)
@@ -144,28 +153,61 @@ class Layers():
 
                 if s_file in GREYSCALE_MAP:
                     self.stacked_trim = self.stacked_trim.convert("L")
-                if format == ".jpg":
-                    self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
-                        quality=options["quality"],
-                        optimize=options["optimize"]
-                    )
-                elif format == ".png":
-                    self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
-                        compression=options["compression"],
-                        optimize=options["optimize"]
-                    )
-                elif format == ".webp":
-                    self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
-                        quality=options["quality"],
-                        lossless=options["lossless"]
-                    )
-                else:
-                    break
+
+                self.save_file(self.stacked_trim, format, options, destination_folder, file_name, s_file)
+                
+                if generate_arm:
+                    if s_file == "ao":
+                        ao_map = self.stacked_trim
+                    if s_file == "roughness":
+                        roughnes_map = self.stacked_trim
+                    if s_file == "metalness":
+                        metalness_map = self.stacked_trim
+
+            if generate_arm:
+                self.save_file(self.get_generated_arm_map(ao_map, roughnes_map, metalness_map), 
+                               format, options, destination_folder, file_name, "arm")
             
+            if genereate_id:
+                self.save_file(self.get_generated_id_map(), 
+                               format, options, destination_folder, file_name, "ID")
+
+            self.change_all_material_map(first_map_type)
             self.open_render_complete_box(destination_folder)
         
         render_in_thread = th.Thread(target=render_threaded())
         render_in_thread.start()
+
+    def save_file(self, img, format, options, destination_folder, file_name, map_name):
+        if format == ".jpg":
+            img.save(os.path.join(destination_folder, file_name + "_" + map_name + format),
+                quality=options["quality"],
+                optimize=options["optimize"]
+            )
+        elif format == ".png":
+            img.save(os.path.join(destination_folder, file_name + "_" + map_name + format),
+                compression=options["compression"],
+                optimize=options["optimize"]
+            )
+        elif format == ".webp":
+            img.save(os.path.join(destination_folder, file_name + "_" + map_name + format),
+                quality=options["quality"],
+                lossless=options["lossless"]
+            )
+
+    def get_generated_arm_map(self, ao_map, roughnes_map, metalness_map):
+        black_img = self.background.convert("L")
+        ao_map = ao_map if ao_map != None else black_img
+        roughnes_map = roughnes_map if roughnes_map != None else black_img
+        metalness_map = metalness_map if metalness_map != None else black_img
+        arm_map = Image.merge("RGB", (ao_map, roughnes_map, metalness_map))
+        return arm_map
+
+    def get_generated_id_map(self):
+        for img in self.images:
+            img.trimmed_image[:,:] = (randint(0, 255), randint(0, 255), randint(0, 255))
+        self.construct_image()
+        return self.stacked_trim
 
     def open_render_complete_box(self, destination_folder):
         box = CTkMessagebox(message="Rendering is complete!",

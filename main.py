@@ -18,7 +18,7 @@ class App(ctk.CTk):
         super().__init__()
         ctk.set_appearance_mode("dark")
         #self.geometry("1200x800")
-        self.title("Easy Trimsheet")
+        self.title(f"Easy Trimsheet - {VERSION}")
         self.state('zoomed')
         self.minsize(1000, 800)
         

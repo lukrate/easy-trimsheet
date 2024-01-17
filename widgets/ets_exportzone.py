@@ -157,7 +157,7 @@ class Exportzone(ctk.CTkFrame):
         elif len(self.destination_folder.get()) <= 0:
             CTkMessagebox(message="No FOLDER selected!", title="Folder", icon="warning")
         else:
-            self.layers.export_final_files(self.get_checkbox_true_values(), self.file_name.get(), self.destination_folder.get(), self.format, self.options_frame.get_values())
+            self.layers.export_final_files(self.get_checkbox_true_values(), self.file_name.get(), self.destination_folder.get(), self.format, self.options_frame.get_values(), self.genereate_arm.get(), self.genereate_id.get())
 
 
 class JpegOptions(ctk.CTkFrame):

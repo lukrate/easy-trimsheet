@@ -3,6 +3,8 @@ from tkinter import PhotoImage
 import customtkinter as ctk
 import os
 
+VERSION = "1.2"
+
 IMAGE_SIZE_DEFAULT = 2048
 IMAGE_SIZE_OPTIONS = ["256", "512", "1024", "2048", "4096", "8192"]
 ROTATE_DEFAULT = 0
@@ -35,7 +37,7 @@ FILE_NAME_PATTERNS = {
     "bump":["_bump_", "_bump", "bump"]
 }
 
-GREYSCALE_MAP = ["roughness", "displacement", "metalness", "ao", "bump"]
+GREYSCALE_MAP = ["roughness", "displacement", "metalness", "ao", "bump", "specular"]
 
 FILE_FORMATS = [".jpg", ".png", ".webp"]
 

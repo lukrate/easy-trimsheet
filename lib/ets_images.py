@@ -125,10 +125,3 @@ class EtsImage:
 
     def __str__(self) -> str:
         return f" path: {self.path}\n w/h: {self.width}/{self.height}\n dtype: {self.dtype}\n layer: {self.layer}"
-
-
-if __name__ == "__main__":
-    img1 = EtsImage("./images/Brick_wall_006_COLOR.jpg")
-    #print(img1)
-    trimmed_img = img1.trim_image(img1.NP_image, 200, 200, 512, 512)
-    img1.show_image(trimmed_img)

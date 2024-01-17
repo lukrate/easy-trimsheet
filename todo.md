@@ -12,9 +12,9 @@
 [X] bug rotation correction
 [X] save and load
 
-[] mettre le rendu dans un autre thread
-[] generate ARM map on export ??
-[] generate id map ??
+[X] mettre le rendu dans un autre thread
+[X] generate ARM map on export
+[X] generate id map
 
 [] settings edit-save ??
 

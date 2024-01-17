@@ -101,19 +101,19 @@ class Workzone(ctk.CTkFrame):
 
 
     def resize_image(self, event):
-        #current_canvas_ratio
+        #----current_canvas_ratio
         if not event.width == 0:
             self.canvas_width = event.width
             self.canvas_height = event.height
         canvas_ratio = self.canvas_width / self.canvas_height
-        #resize image
+        #----resize image
         if canvas_ratio > self.image_ratio:
             image_height = self.canvas_height
             image_width = image_height * self.image_ratio
         else:
             image_width = self.canvas_width
             image_height = image_width / self.image_ratio
-        #place image
+        #----place image
         self.canvas.delete("all")
         try:
             resized_image = self.image.resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
