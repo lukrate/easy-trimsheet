@@ -7,6 +7,8 @@ from utils import get_image_dictionnary
 from icecream import ic
 from copy import copy
 from CTkMessagebox import CTkMessagebox
+
+import threading as th
 import subprocess
 
 class Layers():
@@ -16,6 +18,7 @@ class Layers():
  
         self.images = [] #collections of images
         self.available_maps = []
+        self.current_map_type = "color"
 
         self.stacked_trim_array = [] #np array of images trimmed
         self.stacked_trim = None #final image
@@ -130,37 +133,39 @@ class Layers():
         self.images[id].change_image_rotation(value)
         self.construct_image(update_layers=False)
 
-
     def export_final_files(self, selected_files, file_name, destination_folder, format, options):
+        def render_threaded():
+            i = 0
+            for s_file in selected_files:
+                self.change_all_material_map(s_file)
 
-        i = 0
-        for s_file in selected_files:
-            self.change_all_material_map(s_file)
+                i += 1
+                self.export_widgets.progressbar_value.set(i / len(selected_files))
 
-            i += 1
-            self.export_widgets.progressbar_value.set(i / len(selected_files))
-
-            if s_file in GREYSCALE_MAP:
-                self.stacked_trim = self.stacked_trim.convert("L")
-            if format == ".jpg":
-                self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
-                    quality=options["quality"],
-                    optimize=options["optimize"]
-                )
-            elif format == ".png":
-                self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
-                    compression=options["compression"],
-                    optimize=options["optimize"]
-                )
-            elif format == ".webp":
-                self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
-                    quality=options["quality"],
-                    lossless=options["lossless"]
-                )
-            else:
-                break
+                if s_file in GREYSCALE_MAP:
+                    self.stacked_trim = self.stacked_trim.convert("L")
+                if format == ".jpg":
+                    self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
+                        quality=options["quality"],
+                        optimize=options["optimize"]
+                    )
+                elif format == ".png":
+                    self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
+                        compression=options["compression"],
+                        optimize=options["optimize"]
+                    )
+                elif format == ".webp":
+                    self.stacked_trim.save(os.path.join(destination_folder, file_name + "_" + s_file + format),
+                        quality=options["quality"],
+                        lossless=options["lossless"]
+                    )
+                else:
+                    break
+            
+            self.open_render_complete_box(destination_folder)
         
-        self.open_render_complete_box(destination_folder)
+        render_in_thread = th.Thread(target=render_threaded())
+        render_in_thread.start()
 
     def open_render_complete_box(self, destination_folder):
         box = CTkMessagebox(message="Rendering is complete!",

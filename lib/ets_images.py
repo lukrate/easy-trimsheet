@@ -20,6 +20,7 @@ class EtsImage:
 
         self.is_rotate = False
         self.rotation_value = 0
+        self.thumbnails = {}
 
         self.pil_image = None
         self.np_image = None

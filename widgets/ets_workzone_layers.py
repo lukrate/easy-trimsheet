@@ -66,6 +66,7 @@ class WorkzoneLayers(ctk.CTkFrame):
             pass
     
     def change_current_map(self, map_name):
+        self.layers.current_map_type = map_name
         self.layers.change_all_material_map(map_name)
 
 
@@ -89,7 +90,7 @@ class WorkzoneLayer(ctk.CTkFrame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
-        self.thumbnail = ctk.CTkImage(light_image=layers.images[id].pil_image, size=(72,72))
+        self.thumbnail = self.get_or_create_thumbnail(id)
         self.thumbnail_button = ctk.CTkButton(
             self,
             image=self.thumbnail,
@@ -151,3 +152,14 @@ class WorkzoneLayer(ctk.CTkFrame):
             self.layers.remove_layer(id)
         else:
             pass
+
+    def get_or_create_thumbnail(self, id):
+
+        thumb_dict = self.layers.images[id].thumbnails
+
+        if self.layers.current_map_type in thumb_dict:
+            return thumb_dict[self.layers.current_map_type]
+        else:
+            img = ctk.CTkImage(light_image=self.layers.images[id].pil_image, size=(72,72))
+            self.layers.images[id].thumbnails[self.layers.current_map_type] = img
+            return img
