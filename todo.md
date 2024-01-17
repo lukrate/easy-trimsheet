@@ -12,9 +12,11 @@
 [X] bug rotation correction
 [X] save and load
 
-[] settings edit-save ??
+[] mettre le rendu dans un autre thread
 [] generate ARM map on export ??
 [] generate id map ??
+
+[] settings edit-save ??
 
 Multidimensional image processing 
 https://docs.scipy.org/doc/scipy/reference/ndimage.html
