@@ -1,4 +1,5 @@
 from PIL import Image
+from tkinter import PhotoImage
 import customtkinter as ctk
 import os
 
@@ -53,3 +54,16 @@ ICON_DUPLICATE_PATH = os.path.join(os.path.curdir, "lib", "icon", "duplicate.png
 DUPLICATE_BUTTON = ctk.CTkImage(light_image=Image.open(ICON_DUPLICATE_PATH ),
                                   dark_image=Image.open(ICON_DUPLICATE_PATH ),
                                   size=(16, 16))
+
+ICON_RECYCLE_PATH = os.path.join(os.path.curdir, "lib", "icon", "recycle.png")
+RECYCLE_BUTTON = ctk.CTkImage(light_image=Image.open(ICON_RECYCLE_PATH ),
+                                  dark_image=Image.open(ICON_RECYCLE_PATH ),
+                                  size=(16, 16))
+
+ICON_LOGO_PATH = os.path.join(os.path.curdir, "lib", "icon", "logo.png")
+LOGO_BUTTON = ctk.CTkImage(light_image=Image.open(ICON_LOGO_PATH ),
+                                  dark_image=Image.open(ICON_LOGO_PATH ),
+                                  size=(200, 120))
+
+
+ICON_APP_PATH = os.path.join(os.path.curdir, "lib", "icon", "icon.png")

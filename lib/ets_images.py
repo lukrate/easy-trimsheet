@@ -11,6 +11,7 @@ class EtsImage:
     def __init__(self, images_dict, project_size):
         self.collection = images_dict
         self.path = os.path.join(self.collection["path"], self.collection["color"])
+        self.current_map_type = "color"
         self.width = None
         self.project_size = project_size
         self.height = None
@@ -49,8 +50,8 @@ class EtsImage:
     def trim_image(self, x, y, width=IMAGE_SIZE_DEFAULT, height=IMAGE_SIZE_DEFAULT):
         self.current_pos_x = x
         self.current_pos_y = y
-        self.current_height = height
         self.current_width = width
+        self.current_height = height
         if not self.is_rotate:
             self.trimmed_image = self.np_image[y:y + height, x:x + width]
         else:
@@ -63,6 +64,7 @@ class EtsImage:
         self.rotation_value = value
         if value == "0":
             self.is_rotate = False
+            self.np_image_rotated = self.original_np_image
         elif value == "90":
             self.np_image_rotated = np.rot90(self.original_np_image)
             self.is_rotate = True
@@ -72,6 +74,8 @@ class EtsImage:
         elif value == "270":
             self.np_image_rotated = np.rot90(self.original_np_image, 3)
             self.is_rotate = True
+        else:
+            self.np_image_rotated = self.original_np_image
 
         self.np_image_rotated = self.get_horizonatal_stack(self.np_image_rotated)
         self.np_image_rotated = self.get_downscaled_image(self.np_image_rotated)
@@ -80,6 +84,7 @@ class EtsImage:
     
     def change_material_map(self, map_name):
         if self.collection[map_name] != None:
+            self.current_map_type = map_name
             self.path = os.path.join(self.collection["path"], self.collection[map_name])
             self.openImage()
         else:

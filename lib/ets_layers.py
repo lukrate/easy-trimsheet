@@ -43,8 +43,17 @@ class Layers():
                 self.change_current_layer(len(self.images)-1)
             except AttributeError:
                 self.construct_image(update_layers=True)
+    
+    def change_existing_image(self, id, images_dict):
+        img = self.images[id]
+        img.collection = images_dict
+        img.openImage()
+        self.get_available_maps()
+        img.change_material_map(img.current_map_type)
+        #img.trim_image(img.current_pos_x, img.current_pos_y, img.current_width, img.current_height)
+        img.change_image_rotation(img.rotation_value)
+        self.construct_image(update_layers=True)
                 
-
     def get_free_space(self):
         try:
             return self.size - self.stacked_trim_array.shape[0]

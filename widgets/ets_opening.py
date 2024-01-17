@@ -4,6 +4,7 @@ from os import curdir
 from lib.ets_settings import *
 from icecream import ic
 from CTkMessagebox import CTkMessagebox
+import lib.ets_settings
 
 
 class Opening(ctk.CTkFrame):
@@ -16,6 +17,8 @@ class Opening(ctk.CTkFrame):
 
         self.project_size = ctk.StringVar(value="2048")
 
+        self.logo = ctk.CTkLabel(self, text="", image=LOGO_BUTTON)
+        self.logo.pack(pady=64, padx=64)
 
         self.list_project_size = ctk.CTkOptionMenu(self, variable=self.project_size, values=IMAGE_SIZE_OPTIONS)
         self.list_project_size.pack(pady=12, padx=12)
@@ -24,7 +27,7 @@ class Opening(ctk.CTkFrame):
         self.button_start_new.pack(pady=12, padx=12)
 
         self.button_load_project = ctk.CTkButton(self, text="Load Project", command=self.open_dialog)
-        self.button_load_project.pack(pady=12, padx=12)
+        self.button_load_project.pack(pady=64, padx=24)
 
     def open_dialog(self):
         try:

@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import json
 from tkinter import filedialog
+from PIL import Image, ImageTk
 from lib.ets_layers import Layers
 from lib.ets_settings import *
 from lib.utils import get_save_project_data
@@ -11,15 +12,16 @@ from icecream import ic
 # list of events
 # pythontutorial.net/tkinter/tkinter-event-binding
 
-#window
 class App(ctk.CTk):
     def __init__(self):        
         #setup
         super().__init__()
         ctk.set_appearance_mode("dark")
-        self.geometry("1200x800")
+        #self.geometry("1200x800")
         self.title("Easy Trimsheet")
-        self.minsize(800, 600)
+        self.state('zoomed')
+        self.minsize(1000, 800)
+        
         self.bind_all("<Button-1>", lambda event: self.focus_on_view(event))
 
 
@@ -28,11 +30,15 @@ class App(ctk.CTk):
 
         self.first_view = Opening(self, self.init_app_func)
         #self.construct_tabs()
-        
 
+        ico = Image.open(ICON_APP_PATH)
+        photo = ImageTk.PhotoImage(ico)
+        self.wm_iconbitmap()
+        self.iconphoto(True, photo)
         self.mainloop()
 
     def init_app_func(self, size=None, path=None):
+        self.state('zoomed')
         if path == None:
             self.layers = Layers(size)
         elif path != None:

@@ -1,6 +1,7 @@
 from lib.ets_settings import *
 import customtkinter as ctk
 from tkinter import filedialog
+from CTkMessagebox import CTkMessagebox
 from os import curdir
 from lib.utils import get_image_dictionnary
 from icecream import ic
@@ -82,10 +83,9 @@ class WorkzoneLayer(ctk.CTkFrame):
                 self.configure(fg_color = LIGHT_GREY) 
 
         self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=2)
-        self.columnconfigure(2, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=3)
         self.columnconfigure(3, weight=1)
-        self.columnconfigure(4, weight=1)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
@@ -106,18 +106,48 @@ class WorkzoneLayer(ctk.CTkFrame):
         self.rotation_menu = ctk.CTkOptionMenu(self, values=ROTATIONS_OPTIONS, command=lambda value: self.layers.change_image_rotation(value, self.id))
         self.rotation_menu.grid(column=1, row=1, padx=5, sticky="w")
         
-        self.duplicate_button = ctk.CTkButton(self, text="", image=DUPLICATE_BUTTON, width=28, command= lambda: self.layers.duplicate_layer(self.id))
-        self.duplicate_button.grid(column=2, row=1, padx=5, sticky="e")
+        # ______________________ BUTTONS
+        self.button_frame = ctk.CTkFrame(self, height=30)
+        self.button_frame.grid(column=2, row=1, padx=5, sticky="e")
 
-        self.remove_button = ctk.CTkButton(self, text="", image=CLOSE_BUTTON, width=28, command= lambda: self.layers.remove_layer(self.id))
-        self.remove_button.grid(column=3, row=1, padx=5, sticky="e")
+        self.duplicate_button = ctk.CTkButton(self.button_frame, text="", image=DUPLICATE_BUTTON, width=28, command= lambda: self.layers.duplicate_layer(self.id))
+        self.duplicate_button.grid(column=0, row=0, padx=5, pady=5, sticky="e")
+
+        self.change_button = ctk.CTkButton(self.button_frame, text="", image=RECYCLE_BUTTON, width=28, command= lambda: self.change_material(self.id))
+        self.change_button.grid(column=1, row=0, padx=5, pady=5, sticky="e")
+
+        self.remove_button = ctk.CTkButton(self.button_frame, text="", image=CLOSE_BUTTON, width=28, command= lambda: self.delete_layer(self.id))
+        self.remove_button.grid(column=2, row=0, padx=5, pady=5, sticky="e")
         
+        #_______________________ END BUTTONS
+
         if self.id != 0:
             self.move_top_button = ctk.CTkButton(self, text="▲", width=28, command= lambda: self.layers.move_layer(self.id, direction= -1))
-            self.move_top_button.grid(column=4, row=0, padx=5, sticky="e")
+            self.move_top_button.grid(column=3, row=0, padx=5, sticky="e")
         
         if self.id != len(self.layers.images) -1:
             self.move_down_button = ctk.CTkButton(self, text="▼", width=28, command= lambda: self.layers.move_layer(self.id, direction= 1))
-            self.move_down_button.grid(column=4, row=1, padx=5, sticky="e")
+            self.move_down_button.grid(column=3, row=1, padx=5, sticky="e")
 
         self.grid(column=0, row=id, sticky="nsew", pady=10)
+
+    def change_material(self, id):
+        images_path = (filedialog.askopenfile(initialdir=f"{curdir}/images"))
+        try:
+            images_path = os.path.split(images_path.name)[0]
+        except AttributeError:
+            pass
+        try:
+            self.layers.change_existing_image(id, get_image_dictionnary(images_path))
+        except TypeError:
+            pass
+
+    def delete_layer(self, id):
+        box = CTkMessagebox(message="Delete the layer ?",
+                  icon="warning", option_1="OK", option_2="Cancel")
+        
+        resp = box.get()
+        if resp == "OK":
+            self.layers.remove_layer(id)
+        else:
+            pass
