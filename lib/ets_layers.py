@@ -89,15 +89,20 @@ class Layers():
             else:
                 final_img_array = np.vstack((final_img_array, v.trimmed_image))
         
-        final_img = self.background.copy()
+        #final_img = self.background.copy()
         
-        try:
-            final_img.paste(Image.fromarray(final_img_array))
-            self.stacked_trim_array = final_img_array
-        except AttributeError:
-            pass
+        if final_img_array.shape[0] < self.size:
+            black_part = np.full((self.size - final_img_array.shape[0], self.size, 3), 0, dtype = np.uint8)
+            final_img_array = np.vstack((final_img_array, black_part))
+        else:
+            final_img_array = final_img_array[0 : self.size, 0 : self.size]
         
+        
+        final_img = Image.fromarray(final_img_array)
+        
+        self.stacked_trim_array = final_img_array
         self.stacked_trim = final_img
+
         self.free_space = self.get_free_space()
         
         if not self.workzone_widgets == None:
@@ -138,7 +143,6 @@ class Layers():
     def export_final_files(self, selected_files, file_name, destination_folder, format, options, generate_arm, genereate_id):
         
         def render_threaded():
-            ic(generate_arm, genereate_id)
             
             ao_map = None
             roughnes_map = None

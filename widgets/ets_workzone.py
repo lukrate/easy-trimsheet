@@ -3,15 +3,19 @@ import customtkinter as ctk
 from PIL import ImageTk, Image
 from tkinter import Canvas, ttk
 from icecream import ic
+import numpy as np
+import cv2
 
 from ets_workzone_layers import WorkzoneLayers
 
 class Workzone(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
         super().__init__(master, **kwargs)
+        
+        self.layers = layers
 
-        self.image = Image.new(mode="RGB", size=(layers.size, layers.size))
-        self.image_ratio = self.image.size[0] / self.image.size[1]
+        self.image = np.full((self.layers.size, self.layers.size, 3), 0, dtype = np.uint8)
+        self.image_ratio = self.layers.size / self.layers.size
 
         self.canvas_height = 0
         self.canvas_width = 0
@@ -20,7 +24,6 @@ class Workzone(ctk.CTkFrame):
         self.zoom_level = 1        
         self.move_int = 0
 
-        self.layers = layers
 
         self.current_layer = ctk.IntVar(value=0)
         self.current_trim_h = ctk.IntVar(value = self.layers.size)
@@ -98,6 +101,8 @@ class Workzone(ctk.CTkFrame):
 
         self.layers.workzone_widgets = self
 
+        self.update_canvas()
+        self.canvas.event_generate("<Configure>") 
         
 
 
@@ -117,10 +122,12 @@ class Workzone(ctk.CTkFrame):
         #----place image
         self.canvas.delete("all")
         try:
-            resized_image = self.image.resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
-        except AttributeError:
-            resized_image = Image.new(mode="RGB", size=(IMAGE_SIZE_DEFAULT, IMAGE_SIZE_DEFAULT)).resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
-        self.image_tk = ImageTk.PhotoImage(resized_image)
+            #resized_image = self.image.resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
+            resized_image = cv2.resize(self.image, (int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
+            self.image_tk = ImageTk.PhotoImage(Image.fromarray(resized_image))
+        except cv2.error:
+            resized_image = Image.new(mode="RGB", size=(self.layers.size, self.layers.size)).resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
+            self.image_tk = ImageTk.PhotoImage(resized_image)
         self.canvas.create_image(
             self.canvas_width/2 - self.offset_x ,
             self.canvas_height/2 - self.offset_y , 
@@ -186,5 +193,5 @@ class Workzone(ctk.CTkFrame):
             pass
 
     def update_canvas(self):
-        self.image = self.layers.stacked_trim
+        self.image = self.layers.stacked_trim_array
         self.canvas.event_generate("<Configure>") 

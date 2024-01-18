@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from copy import copy
 from icecream import ic
+from watchpoints import watch
 import os
 
 class EtsImage:
@@ -15,6 +16,7 @@ class EtsImage:
         self.width = None
         self.project_size = project_size
         self.height = None
+        #watch(self.height, __file__)
         self.dtype = None
         self.shape:tuple = None # (w, h, layers)
 
@@ -44,11 +46,11 @@ class EtsImage:
     
         self.dtype = self.np_image.dtype
         self.shape = self.np_image.shape
-        self.width = self.shape[0]
-        self.height = self.shape[1]
+        self.width = self.shape[1]
+        self.height = self.shape[0]
         self.image_ratio = self.width / self.height
 
-    def trim_image(self, x, y, width=IMAGE_SIZE_DEFAULT, height=IMAGE_SIZE_DEFAULT):
+    def trim_image(self, x, y, width=0, height=0):
         self.current_pos_x = x
         self.current_pos_y = y
         self.current_width = width
@@ -104,9 +106,12 @@ class EtsImage:
 
     def get_horizonatal_stack(self, np_image):
         if np_image.shape[0] < self.project_size:
-            hstacked_np_image = np_image
+            hstacked_np_image = None
             for i in range(0, int(self.project_size / np_image.shape[0])):
-                hstacked_np_image = np.hstack((hstacked_np_image, np_image))
+                if i == 0:
+                    hstacked_np_image = np_image
+                else:   
+                    hstacked_np_image = np.hstack((hstacked_np_image, np_image))
             return hstacked_np_image
         else:
             return np_image

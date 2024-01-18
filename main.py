@@ -60,6 +60,8 @@ class App(ctk.CTk):
             self.layers.change_current_layer(0)
         except IndexError:
             pass
+    
+        self.layers.construct_image(update_layers=False)
             
     def construct_tabs(self):
         #----------------- TABS INIT
