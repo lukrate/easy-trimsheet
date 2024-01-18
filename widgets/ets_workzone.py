@@ -83,7 +83,7 @@ class Workzone(ctk.CTkFrame):
         self.input_trim.grid(row=1, column=2, padx=20, pady=0, sticky="ew")
         self.slider_trim = ctk.CTkSlider(
             self,
-            from_=0, to=self.max_trim_h.get(),
+            from_=10, to=2048,
             orientation="vertical",
             variable=self.current_trim_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
@@ -139,7 +139,6 @@ class Workzone(ctk.CTkFrame):
             self.offset_x += (event.x - self.canvas_width/2) / 2
             self.offset_y += (event.y - self.canvas_height/2) / 2
         self.canvas.event_generate("<Configure>")
-    
 
     def move_from_click(self, event):
         self.drag_origin_x = event.x
@@ -164,8 +163,20 @@ class Workzone(ctk.CTkFrame):
 
     def sliders_update_current_trim(self, height, position):
         self.layers.images[self.current_layer.get()].trim_image(0, position, self.layers.size, height)
-        self.max_trim_h.set(self.layers.images[self.current_layer.get()].height - position)
+        self.set_sliders_max_values()
         self.layers.construct_image()
+
+    def set_sliders_max_values(self):
+        try:
+            self.max_trim_h.set(self.layers.images[self.current_layer.get()].height - self.current_pos_h.get())
+            self.slider_trim.configure(to=self.max_trim_h.get())
+            self.slider_trim.set(self.current_trim_h.get())
+            if self.max_pos_h != self.layers.images[self.current_layer.get()].height:
+                self.max_pos_h.set(self.layers.images[self.current_layer.get()].height)
+                self.slider_position.configure(to=self.max_pos_h.get())
+                self.slider_position.set(self.current_pos_h.get())
+        except ZeroDivisionError:
+            pass
 
     def update_canvas(self):
         self.image = self.layers.stacked_trim

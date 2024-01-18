@@ -56,6 +56,7 @@ class Layers():
         img.change_material_map(img.current_map_type)
         #img.trim_image(img.current_pos_x, img.current_pos_y, img.current_width, img.current_height)
         img.change_image_rotation(img.rotation_value)
+        img.thumbnails = {}
         self.construct_image(update_layers=True)
                 
     def get_free_space(self):
@@ -110,6 +111,7 @@ class Layers():
         self.workzone_widgets.current_layer.set(value)
         self.workzone_widgets.current_pos_h.set(self.images[value].current_pos_y)
         self.workzone_widgets.current_trim_h.set(self.images[value].current_height)
+        self.workzone_widgets.set_sliders_max_values()
         self.workzone_widgets.layers_view.create_layers()
     
     def move_layer(self, id, direction):
@@ -227,4 +229,3 @@ class Layers():
         self.add_new_image(images_dict = images_dict_2, height=850)
 
         self.construct_image()
-        #self.stacked_trim.show()    

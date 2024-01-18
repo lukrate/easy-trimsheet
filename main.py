@@ -55,6 +55,11 @@ class App(ctk.CTk):
 
         self.first_view.pack_forget()
         self.construct_tabs()
+        
+        try:
+            self.layers.change_current_layer(0)
+        except IndexError:
+            pass
             
     def construct_tabs(self):
         #----------------- TABS INIT
