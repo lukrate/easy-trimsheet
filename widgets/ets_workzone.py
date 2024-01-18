@@ -17,8 +17,9 @@ class Workzone(ctk.CTkFrame):
         self.canvas_width = 0
         self.offset_x = 0
         self.offset_y = 0
-        self.zoom_level = 1
-        
+        self.zoom_level = 1        
+        self.move_int = 0
+
         self.layers = layers
 
         self.current_layer = ctk.IntVar(value=0)
@@ -145,13 +146,19 @@ class Workzone(ctk.CTkFrame):
         self.drag_origin_y = event.y
         self.pos_origin_x = self.offset_x
         self.pos_origin_y = self.offset_y
-
+            
     def move_to_on_click(self, event):
-        new_pos_x = round((event.x - self.drag_origin_x))
-        new_pos_y = round((event.y - self.drag_origin_y))
-        self.offset_x = self.pos_origin_x - new_pos_x
-        self.offset_y = self.pos_origin_y - new_pos_y
-        self.canvas.event_generate("<Configure>")
+        if self.move_int == 0:
+            new_pos_x = round((event.x - self.drag_origin_x))
+            new_pos_y = round((event.y - self.drag_origin_y))
+            self.offset_x = self.pos_origin_x - new_pos_x
+            self.offset_y = self.pos_origin_y - new_pos_y
+            self.move_int += 1
+            self.canvas.event_generate("<Configure>")
+        if self.move_int >= 4:
+            self.move_int = 0
+        else:
+            self.move_int += 1
     
     def reset_canvas(self, event):
         self.offset_x = 0

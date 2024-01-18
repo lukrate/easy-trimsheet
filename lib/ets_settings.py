@@ -3,7 +3,7 @@ from tkinter import PhotoImage
 import customtkinter as ctk
 import os
 
-VERSION = "1.2"
+VERSION = "1.21"
 
 IMAGE_SIZE_DEFAULT = 2048
 IMAGE_SIZE_OPTIONS = ["256", "512", "1024", "2048", "4096", "8192"]
