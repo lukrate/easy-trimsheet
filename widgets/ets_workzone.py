@@ -149,22 +149,23 @@ class Workzone(ctk.CTkFrame):
         cur_img = self.layers.images[self.current_layer.get()].current_height
         if self.current_layer.get() != 0:
             pos_offset_y = 0
-            for i, image in enumerate(self.layers.images):
+            for i, img in enumerate(self.layers.images):
                 if i < self.current_layer.get():
-                    pos_offset_y += math.floor(image.current_height)
+                    pos_offset_y += img.current_height
                 else:
                     break
-            pos_offset_y = pos_offset_y * (self.zoom_level/2)
+            pos_offset_y = (pos_offset_y * self.zoom_level)/2
         else: 
             pos_offset_y = 0
         
-        ic(pos_offset_y)
+        correction_canvas_size_img_size = self.layers.size/(self.canvas_height*2)
+        
         self.canvas.create_rectangle(
                 (self.canvas_width/2 - self.offset_x) + (image_width * self.zoom_level)/2, 
-                (self.canvas_height/2 - self.offset_y) - (image_height * self.zoom_level)/2 + pos_offset_y, 
+                (self.canvas_height/2 - self.offset_y) - (image_height * self.zoom_level)/2 + pos_offset_y / correction_canvas_size_img_size, 
                 (self.canvas_width/2 - self.offset_x) - (image_width * self.zoom_level)/2, 
-                (self.canvas_height/2 - self.offset_y) - (image_height * self.zoom_level)/2 + (cur_img * self.zoom_level)/2 + pos_offset_y, 
-                outline='red')
+                ((self.canvas_height/2 - self.offset_y) - (image_height * self.zoom_level)/2 + (cur_img / correction_canvas_size_img_size * self.zoom_level)/2 + pos_offset_y / correction_canvas_size_img_size),
+                outline=BLUE)
 
         
 
