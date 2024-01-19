@@ -46,7 +46,7 @@ class App(ctk.CTk):
                 loaded_data = json.load(openfile)
             self.layers = Layers(loaded_data["size"])
             for image in loaded_data["images"]:
-                self.layers.add_new_image(images_dict = image["collection"], height=image["current_height"], posx=image["current_pos_x"])
+                self.layers.add_new_image(images_dict = image["collection"], height=image["current_height"], posx=image["current_pos_x"], posy=image["current_pos_y"])
                 self.layers.images[-1].is_rotate = image["is_rotate"]
                 if image["is_rotate"]:
                     self.layers.images[-1].rotation_value = image["rotation_value"]
@@ -55,7 +55,7 @@ class App(ctk.CTk):
 
         self.first_view.pack_forget()
         self.construct_tabs()
-        
+            
         try:
             self.layers.change_current_layer(0)
         except IndexError:
@@ -103,6 +103,11 @@ class App(ctk.CTk):
         formats = [("Easy Trim Sheet", ".ets")]
         file = filedialog.asksaveasfile(filetypes=formats, defaultextension=formats)
         file_content = json.dumps(get_save_project_data(self.layers))
+        ic(file)
+        """ try:
+            file.write(file_content)
+        except AttributeError:
+            return """
         file.write(file_content)
         file.close()
         

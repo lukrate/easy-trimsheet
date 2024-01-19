@@ -5,6 +5,7 @@ from tkinter import filedialog
 from os import curdir
 from icecream import ic
 import math
+import utils as utils
 
 class Exportzone(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
@@ -157,6 +158,16 @@ class Exportzone(ctk.CTkFrame):
         elif len(self.destination_folder.get()) <= 0:
             CTkMessagebox(message="No FOLDER selected!", title="Folder", icon="warning")
         else:
+            files_in_destination = utils.get_files_in_folder(os.path.join(self.destination_folder.get()))
+            for file in files_in_destination:
+                if self.file_name.get() in file:
+                    msg = CTkMessagebox(message="File Name already exist!\n Overwrite files?", title="File Name", icon="warning", option_1="OK", option_2="Cancel")
+                    resp = msg.get()
+                    if resp == "Cancel":
+                        return
+                    else:
+                        break
+
             self.layers.export_final_files(self.get_checkbox_true_values(), self.file_name.get(), self.destination_folder.get(), self.format, self.options_frame.get_values(), self.genereate_arm.get(), self.genereate_id.get())
 
 
