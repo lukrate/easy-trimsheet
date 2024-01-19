@@ -160,7 +160,7 @@ class Exportzone(ctk.CTkFrame):
         else:
             files_in_destination = utils.get_files_in_folder(os.path.join(self.destination_folder.get()))
             for file in files_in_destination:
-                if self.file_name.get() in file:
+                if self.file_name.get() in file and self.format in file:
                     msg = CTkMessagebox(message="File Name already exist!\n Overwrite files?", title="File Name", icon="warning", option_1="OK", option_2="Cancel")
                     resp = msg.get()
                     if resp == "Cancel":

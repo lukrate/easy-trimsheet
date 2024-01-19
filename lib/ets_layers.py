@@ -218,7 +218,7 @@ class Layers():
         return self.stacked_trim
 
     def open_render_complete_box(self, destination_folder):
-        box = CTkMessagebox(message="Rendering is complete!", title="Compelete!"
+        box = CTkMessagebox(message="Rendering is complete!", title="Compelete!",
                   icon="check", option_1="OK", option_2="Open Folder")
         
         resp = box.get()

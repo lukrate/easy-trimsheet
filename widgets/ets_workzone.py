@@ -73,6 +73,7 @@ class Workzone(ctk.CTkFrame):
             variable=self.current_pos_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
         self.slider_position.grid(row=2, column=1, padx=10, pady=20, sticky="ns")
+        self.slider_position.bind("<MouseWheel>", command=lambda event: self.sliders_update_current_pos_h_on_mousewheel(-1 if event.delta < 0 else 1))
         
         
         # ------------- SLIDER 2 --------------
@@ -92,6 +93,8 @@ class Workzone(ctk.CTkFrame):
             variable=self.current_trim_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
         self.slider_trim.grid(row=2, column=2, padx=10, pady=20, sticky="ns")
+        self.slider_trim.bind("<MouseWheel>", command=lambda event: self.sliders_update_current_trim_h_on_mousewheel(-1 if event.delta < 0 else 1))
+
         #endregion view
         
     
@@ -143,9 +146,10 @@ class Workzone(ctk.CTkFrame):
                     self.offset_x = 0
                     self.offset_y = 0
         else:
-            self.zoom_level += .25
-            self.offset_x += (event.x - self.canvas_width/2) / 2
-            self.offset_y += (event.y - self.canvas_height/2) / 2
+            if self.zoom_level < 2.5:
+                self.zoom_level += .25
+                self.offset_x += (event.x - self.canvas_width/2) / 2
+                self.offset_y += (event.y - self.canvas_height/2) / 2
         self.canvas.event_generate("<Configure>")
 
     def move_from_click(self, event):
@@ -174,6 +178,14 @@ class Workzone(ctk.CTkFrame):
         self.pos_origin_y = 0
         self.zoom_level = 1
         self.canvas.event_generate("<Configure>")
+
+    def sliders_update_current_pos_h_on_mousewheel(self, value):
+        self.current_pos_h.set(self.current_pos_h.get() + value)
+        self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get())
+
+    def sliders_update_current_trim_h_on_mousewheel(self, value):
+        self.current_trim_h.set(self.current_trim_h.get() - value)
+        self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get())
 
     def sliders_update_current_trim(self, height, position):
         self.layers.images[self.current_layer.get()].trim_image(0, position, self.layers.size, height)
