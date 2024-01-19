@@ -68,7 +68,7 @@ class Workzone(ctk.CTkFrame):
 
         self.slider_position = ctk.CTkSlider(
             self, 
-            from_=0, to=2048, 
+            from_=0, to=self.layers.size, 
             orientation="vertical", 
             variable=self.current_pos_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
@@ -87,7 +87,7 @@ class Workzone(ctk.CTkFrame):
         self.input_trim.grid(row=1, column=2, padx=20, pady=0, sticky="ew")
         self.slider_trim = ctk.CTkSlider(
             self,
-            from_=10, to=2048,
+            from_=self.layers.size, to=0,
             orientation="vertical",
             variable=self.current_trim_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
@@ -183,7 +183,7 @@ class Workzone(ctk.CTkFrame):
     def set_sliders_max_values(self):
         try:
             self.max_trim_h.set(self.layers.images[self.current_layer.get()].height - self.current_pos_h.get())
-            self.slider_trim.configure(to=self.max_trim_h.get())
+            self.slider_trim.configure(from_=self.max_trim_h.get())
             self.slider_trim.set(self.current_trim_h.get())
             if self.max_pos_h != self.layers.images[self.current_layer.get()].height:
                 self.max_pos_h.set(self.layers.images[self.current_layer.get()].height)
