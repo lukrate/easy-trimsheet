@@ -210,13 +210,15 @@ class Layers():
         return arm_map
 
     def get_generated_id_map(self):
+        i = 0
         for img in self.images:
-            img.trimmed_image[:,:] = (randint(0, 255), randint(0, 255), randint(0, 255))
+            img.trimmed_image[:,:] = ID_MAP_COLORS[i]
+            i += 1
         self.construct_image()
         return self.stacked_trim
 
     def open_render_complete_box(self, destination_folder):
-        box = CTkMessagebox(message="Rendering is complete!",
+        box = CTkMessagebox(message="Rendering is complete!", title="Compelete!"
                   icon="check", option_1="OK", option_2="Open Folder")
         
         resp = box.get()
