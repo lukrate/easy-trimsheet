@@ -118,6 +118,7 @@ class Layers():
         self.workzone_widgets.current_trim_h.set(self.images[value].current_height)
         self.workzone_widgets.set_sliders_max_values()
         self.workzone_widgets.layers_view.create_layers()
+        self.workzone_widgets.update_canvas()
     
     def move_layer(self, id, direction):
         self.images[id], self.images[id + direction] = self.images[id + direction], self.images[id]

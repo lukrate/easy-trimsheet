@@ -5,6 +5,7 @@ from tkinter import Canvas, ttk
 from icecream import ic
 import numpy as np
 import cv2
+import math
 
 from ets_workzone_layers import WorkzoneLayers
 
@@ -26,6 +27,7 @@ class Workzone(ctk.CTkFrame):
 
 
         self.current_layer = ctk.IntVar(value=0)
+        self.current_layer.trace_add('write', self.draw_rect)
         self.current_trim_h = ctk.IntVar(value = self.layers.size)
         self.current_pos_h = ctk.IntVar(value = 0)
 
@@ -73,7 +75,9 @@ class Workzone(ctk.CTkFrame):
             variable=self.current_pos_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
         self.slider_position.grid(row=2, column=1, padx=10, pady=20, sticky="ns")
-        self.slider_position.bind("<MouseWheel>", command=lambda event: self.sliders_update_current_pos_h_on_mousewheel(-1 if event.delta < 0 else 1))
+        
+        self.slider_position.bind("<MouseWheel>", command=lambda event: self.sliders_update_current_pos_h_on_mousewheel(-5 if event.delta < 0 else 5))
+        self.slider_position.bind("<Shift-MouseWheel>", command=lambda event: self.sliders_update_current_pos_h_on_mousewheel(-1 if event.delta < 0 else 1))
         
         
         # ------------- SLIDER 2 --------------
@@ -93,7 +97,8 @@ class Workzone(ctk.CTkFrame):
             variable=self.current_trim_h,
             command=lambda value: self.sliders_update_current_trim(self.current_trim_h.get(), self.current_pos_h.get()))
         self.slider_trim.grid(row=2, column=2, padx=10, pady=20, sticky="ns")
-        self.slider_trim.bind("<MouseWheel>", command=lambda event: self.sliders_update_current_trim_h_on_mousewheel(-1 if event.delta < 0 else 1))
+        self.slider_trim.bind("<MouseWheel>", command=lambda event: self.sliders_update_current_trim_h_on_mousewheel(-5 if event.delta < 0 else 5))
+        self.slider_trim.bind("<Shift-MouseWheel>", command=lambda event: self.sliders_update_current_trim_h_on_mousewheel(-1 if event.delta < 0 else 1))
 
         #endregion view
         
@@ -124,9 +129,14 @@ class Workzone(ctk.CTkFrame):
             image_height = image_width / self.image_ratio
         #----place image
         self.canvas.delete("all")
+        ### draw rect
+        
         try:
             #resized_image = self.image.resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
             resized_image = cv2.resize(self.image, (int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
+            
+            
+            
             self.image_tk = ImageTk.PhotoImage(Image.fromarray(resized_image))
         except cv2.error:
             resized_image = Image.new(mode="RGB", size=(self.layers.size, self.layers.size)).resize((int(image_width * self.zoom_level), int(image_height * self.zoom_level)))
@@ -136,7 +146,34 @@ class Workzone(ctk.CTkFrame):
             self.canvas_height/2 - self.offset_y , 
             image = self.image_tk
         ) #image_position x,y - img
-    
+        cur_img = self.layers.images[self.current_layer.get()].current_height
+        if self.current_layer.get() != 0:
+            pos_offset_y = 0
+            for i, image in enumerate(self.layers.images):
+                if i < self.current_layer.get():
+                    pos_offset_y += math.floor(image.current_height)
+                else:
+                    break
+            pos_offset_y = pos_offset_y * (self.zoom_level/2)
+        else: 
+            pos_offset_y = 0
+        
+        ic(pos_offset_y)
+        self.canvas.create_rectangle(
+                (self.canvas_width/2 - self.offset_x) + (image_width * self.zoom_level)/2, 
+                (self.canvas_height/2 - self.offset_y) - (image_height * self.zoom_level)/2 + pos_offset_y, 
+                (self.canvas_width/2 - self.offset_x) - (image_width * self.zoom_level)/2, 
+                (self.canvas_height/2 - self.offset_y) - (image_height * self.zoom_level)/2 + (cur_img * self.zoom_level)/2 + pos_offset_y, 
+                outline='red')
+
+        
+
+
+    def draw_rect(self, var, index, mode):
+        ic(self.current_layer.get())
+        
+        
+
     def zoom_on_mouse_wheel(self, event):
         if event.delta < 0:
             if self.zoom_level > 0.7:
