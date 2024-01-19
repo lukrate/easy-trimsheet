@@ -4,7 +4,6 @@ import cv2
 import numpy as np
 from copy import copy
 from icecream import ic
-from watchpoints import watch
 import os
 
 class EtsImage:
