@@ -1,4 +1,4 @@
-from ets_settings import *
+from lib.ets_settings import *
 from PIL import Image
 import cv2
 import numpy as np

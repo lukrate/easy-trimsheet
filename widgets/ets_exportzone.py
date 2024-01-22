@@ -5,7 +5,7 @@ from tkinter import filedialog
 from os import curdir
 from icecream import ic
 import math
-import utils as utils
+import lib.utils as utils
 
 class Exportzone(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):

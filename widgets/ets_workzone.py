@@ -5,9 +5,8 @@ from tkinter import Canvas, ttk
 from icecream import ic
 import numpy as np
 import cv2
-import math
 
-from ets_workzone_layers import WorkzoneLayers
+from widgets.ets_workzone_layers import WorkzoneLayers
 
 class Workzone(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):

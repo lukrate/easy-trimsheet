@@ -1,13 +1,12 @@
 import os
 from PIL import Image
 import numpy as np
-from ets_settings import *
-from ets_images import EtsImage
-from utils import get_image_dictionnary
+from lib.ets_settings import *
+from lib.ets_images import EtsImage
+from lib.utils import get_image_dictionnary
 from icecream import ic
 from copy import copy
 from CTkMessagebox import CTkMessagebox
-from random import randint
 
 import threading as th
 import subprocess

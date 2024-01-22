@@ -1,6 +1,6 @@
 from os import listdir
 from os.path import isfile, join
-from ets_settings import FILE_NAME_PATTERNS
+from lib.ets_settings import FILE_NAME_PATTERNS
 from icecream import ic
 
 img_path = "D:\Python\easytrimsheet\images\wood_planks\\2k"
