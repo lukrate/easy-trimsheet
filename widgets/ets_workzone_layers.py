@@ -55,7 +55,7 @@ class WorkzoneLayers(ctk.CTkFrame):
 
         
         if len(self.layer_blocks) > 0:
-            self.layers_map_list.grid(column=1, row=0, pady=5, sticky="ew")
+            self.layers_map_list.grid(column=1, row=0, pady=2, sticky="ew")
             self.layers_map_list.configure(require_redraw=True, values=self.layers.available_maps)
         if self.is_first_generation:
             self.layers_map_list.set("color")

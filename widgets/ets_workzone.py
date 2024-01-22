@@ -160,7 +160,6 @@ class Workzone(ctk.CTkFrame):
             current_layer_height = self.layers.images[self.current_layer.get()].current_height
 
             correction_canvas_img_original_img = image_width/self.layers.size
-
             
             center_x = self.canvas_width/2 - self.offset_x
             center_y = self.canvas_height/2 - self.offset_y
@@ -171,14 +170,21 @@ class Workzone(ctk.CTkFrame):
             pos_layer_nw_y = stack_pos_offset_y * correction_canvas_img_original_img * self.zoom_level
             pos_layer_ne_y = (stack_pos_offset_y + current_layer_height) * correction_canvas_img_original_img * self.zoom_level
 
-            self.create_circle(self.canvas, corner_nw[0], corner_nw[1] + pos_layer_nw_y, 3, fill="red")
-            self.create_circle(self.canvas, corner_ne[0], corner_ne[1] + pos_layer_ne_y, 3, fill="red")
+            point_w = corner_nw[1] + pos_layer_nw_y
+        
+            if corner_ne[1] + pos_layer_ne_y > center_y + image_height/2 * self.zoom_level:
+                point_e = center_y + image_height/2 * self.zoom_level
+            else:
+                point_e = corner_ne[1] + pos_layer_ne_y
+
+            self.create_circle(self.canvas, corner_nw[0], point_w, 3, fill="red")
+            self.create_circle(self.canvas, corner_ne[0], point_e, 3, fill="red")
 
             self.canvas.create_rectangle(
                     corner_nw[0], 
-                    corner_nw[1] + pos_layer_nw_y, 
+                    point_w, 
                     corner_ne[0], 
-                    corner_ne[1] + pos_layer_ne_y,
+                    point_e,
                     outline="red", dash=(40, 100), width=2)
         
         if self.layers_view.show_outline.get():
@@ -252,6 +258,7 @@ class Workzone(ctk.CTkFrame):
                 self.slider_position.set(self.current_pos_h.get())
         except ZeroDivisionError:
             pass
+        
     def create_circle(self, canvas, x, y, r, **kwargs):
         return canvas.create_oval(x-r, y-r, x+r, y+r, **kwargs)
 
