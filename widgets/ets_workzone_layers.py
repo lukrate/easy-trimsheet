@@ -19,6 +19,7 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
+        self.columnconfigure(3, weight=1)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=45)
 
@@ -29,11 +30,14 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.layers_map_list.grid(column=1, row=0, pady=5, sticky="ew")
         self.layers_map_list.grid_forget()
 
+        self.show_outline = ctk.CTkCheckBox(self, text="Show Outline", command=lambda: self.layers.construct_image())
+        self.show_outline.grid(column=2,row=0, pady=5, padx=10, sticky="ew")
+
         self.button_add_picture = ctk.CTkButton(self, text="", image=PLUS_BUTTON, command=self.open_image_view, width=48, height=32)
-        self.button_add_picture.grid(column=2, row=0, padx=0, pady=0, sticky="nse")
+        self.button_add_picture.grid(column=3, row=0, padx=0, pady=0, sticky="nse")
 
         self.layer_frame = ctk.CTkScrollableFrame(master=self)
-        self.layer_frame.grid(column=0, row=1, padx=2, pady=0, columnspan=3, sticky="nsew")
+        self.layer_frame.grid(column=0, row=1, padx=2, pady=0, columnspan=4, sticky="nsew")
         self.layer_frame.columnconfigure(0, weight=1)
         self.layer_frame.configure(fg_color=DARK_GREY)
 

@@ -103,7 +103,6 @@ class App(ctk.CTk):
         formats = [("Easy Trim Sheet", ".ets")]
         file = filedialog.asksaveasfile(filetypes=formats, defaultextension=formats)
         file_content = json.dumps(get_save_project_data(self.layers))
-        ic(file)
         """ try:
             file.write(file_content)
         except AttributeError:

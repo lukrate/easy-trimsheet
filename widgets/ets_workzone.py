@@ -27,7 +27,6 @@ class Workzone(ctk.CTkFrame):
 
 
         self.current_layer = ctk.IntVar(value=0)
-        self.current_layer.trace_add('write', self.draw_rect)
         self.current_trim_h = ctk.IntVar(value = self.layers.size)
         self.current_pos_h = ctk.IntVar(value = 0)
 
@@ -146,34 +145,47 @@ class Workzone(ctk.CTkFrame):
             self.canvas_height/2 - self.offset_y , 
             image = self.image_tk
         ) #image_position x,y - img
-        cur_img = self.layers.images[self.current_layer.get()].current_height
-        if self.current_layer.get() != 0:
-            pos_offset_y = 0
-            for i, img in enumerate(self.layers.images):
-                if i < self.current_layer.get():
-                    pos_offset_y += img.current_height
-                else:
-                    break
-            pos_offset_y = (pos_offset_y * self.zoom_level)/2
-        else: 
-            pos_offset_y = 0
         
-        correction_canvas_size_img_size = self.layers.size/(self.canvas_height*2)
-        
-        self.canvas.create_rectangle(
-                (self.canvas_width/2 - self.offset_x) + (image_width * self.zoom_level)/2, 
-                (self.canvas_height/2 - self.offset_y) - (image_height * self.zoom_level)/2 + pos_offset_y / correction_canvas_size_img_size, 
-                (self.canvas_width/2 - self.offset_x) - (image_width * self.zoom_level)/2, 
-                ((self.canvas_height/2 - self.offset_y) - (image_height * self.zoom_level)/2 + (cur_img / correction_canvas_size_img_size * self.zoom_level)/2 + pos_offset_y / correction_canvas_size_img_size),
-                outline=BLUE)
+        #### GET CURRENT VALUES OF LAYERS
+        def draw_outline():
+            if self.current_layer.get() != 0:
+                stack_pos_offset_y = 0
+                for i, img in enumerate(self.layers.images):
+                    if i < self.current_layer.get():
+                        stack_pos_offset_y += img.current_height
+                    else:
+                        break
+            else: 
+                stack_pos_offset_y = 0
+            
+            current_layer_height = self.layers.images[self.current_layer.get()].current_height
 
-        
+            correction_canvas_img_original_img = image_width/self.layers.size
 
+            
+            center_x = self.canvas_width/2 - self.offset_x
+            center_y = self.canvas_height/2 - self.offset_y
+            
+            corner_nw = (center_x - image_width/2 * self.zoom_level, center_y - image_height/2 * self.zoom_level)
+            corner_ne = (center_x + image_width/2 * self.zoom_level, center_y - image_height/2 * self.zoom_level)
 
-    def draw_rect(self, var, index, mode):
-        ic(self.current_layer.get())
+            pos_layer_nw_y = stack_pos_offset_y * correction_canvas_img_original_img * self.zoom_level
+            pos_layer_ne_y = (stack_pos_offset_y + current_layer_height) * correction_canvas_img_original_img * self.zoom_level
+
+            self.create_circle(self.canvas, corner_nw[0], corner_nw[1] + pos_layer_nw_y, 3, fill="red")
+            self.create_circle(self.canvas, corner_ne[0], corner_ne[1] + pos_layer_ne_y, 3, fill="red")
+
+            self.canvas.create_rectangle(
+                    corner_nw[0], 
+                    corner_nw[1] + pos_layer_nw_y, 
+                    corner_ne[0], 
+                    corner_ne[1] + pos_layer_ne_y,
+                    outline="red", dash=(40, 100), width=2)
         
-        
+        if self.layers_view.show_outline.get():
+            draw_outline()
+
+    
 
     def zoom_on_mouse_wheel(self, event):
         if event.delta < 0:
@@ -241,6 +253,8 @@ class Workzone(ctk.CTkFrame):
                 self.slider_position.set(self.current_pos_h.get())
         except ZeroDivisionError:
             pass
+    def create_circle(self, canvas, x, y, r, **kwargs):
+        return canvas.create_oval(x-r, y-r, x+r, y+r, **kwargs)
 
     def update_canvas(self):
         self.image = self.layers.stacked_trim_array
