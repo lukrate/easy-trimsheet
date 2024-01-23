@@ -133,6 +133,8 @@ class Layers():
     
     def remove_layer(self, id): 
         self.images.pop(id)
+        self.get_available_maps()
+        self.export_widgets.set_checkbox_default_values()
         self.construct_image(update_layers=True)
 
     def change_all_material_map(self, map_name):

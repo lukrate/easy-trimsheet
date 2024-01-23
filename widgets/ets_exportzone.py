@@ -135,6 +135,10 @@ class Exportzone(ctk.CTkFrame):
 
     def set_checkbox_default_values(self):
         for key, child in self.export_options_frame.children.items():
+            try:
+                child.deselect()
+            except AttributeError:
+                continue
             if isinstance(child, ctk.CTkCheckBox):
                 for img in self.layers.images:
                     try:
