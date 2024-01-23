@@ -16,6 +16,8 @@
 [X] generate ARM map on export
 [X] generate id map
 
+[] export layout as txt
+
 [] settings edit-save ??
 
 Multidimensional image processing 
