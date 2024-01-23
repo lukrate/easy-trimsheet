@@ -36,7 +36,7 @@ class Layers():
         return img
     
     def add_new_image(self, images_dict:dict = None, height = None, posx = 0, posy = 0):
-        height = self.get_free_space() if height == None else height
+        height = self.get_free_space() if self.get_free_space() or height == None else height
         if not images_dict == None:
             self.images.append(EtsImage(images_dict, self.size))
             self.get_available_maps()
@@ -60,9 +60,9 @@ class Layers():
                 
     def get_free_space(self):
         try:
-            return self.size - self.stacked_trim_array.shape[0]
+            return self.free_space
         except AttributeError:
-            return self.size
+            print("no free space")
     
     def get_available_maps(self):
         a_maps = []
@@ -90,12 +90,16 @@ class Layers():
         
         #final_img = self.background.copy()
         
-        if final_img_array.shape[0] < self.size:
-            black_part = np.full((self.size - final_img_array.shape[0], self.size, 3), 0, dtype = np.uint8)
-            final_img_array = np.vstack((final_img_array, black_part))
-        else:
-            final_img_array = final_img_array[0 : self.size, 0 : self.size]
-        
+        try:
+            if final_img_array.shape[0] < self.size:
+                self.free_space = self.size - final_img_array.shape[0]
+                black_part = np.full((self.size - final_img_array.shape[0], self.size, 3), 0, dtype = np.uint8)
+                final_img_array = np.vstack((final_img_array, black_part))
+            else:
+                final_img_array = final_img_array[0 : self.size, 0 : self.size]
+        except AttributeError:
+            final_img_array = np.full((self.size, self.size, 3), 0, dtype = np.uint8)
+            self.free_space = self.size
         
         final_img = Image.fromarray(final_img_array)
         
