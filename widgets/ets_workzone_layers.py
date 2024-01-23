@@ -63,7 +63,10 @@ class WorkzoneLayers(ctk.CTkFrame):
 
     def open_image_view(self):
         images_path = (filedialog.askopenfile(initialdir=f"{curdir}/images"))
-        images_path = os.path.split(images_path.name)[0]
+        try:
+            images_path = os.path.split(images_path.name)[0]
+        except AttributeError:
+            print("open path failed")
         try:
             self.layers.add_new_image(get_image_dictionnary(images_path))
         except TypeError:

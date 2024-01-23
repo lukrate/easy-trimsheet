@@ -42,7 +42,7 @@ class Layers():
             self.get_available_maps()
             self.images[-1].trim_image(posx, posy, height=height, width=self.size)
             try:
-                self.construct_image(update_layers=False)
+                self.construct_image(update_layers=True)
                 self.change_current_layer(len(self.images)-1)
             except AttributeError:
                 self.construct_image(update_layers=True)
