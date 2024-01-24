@@ -41,7 +41,7 @@ class Exportzone(ctk.CTkFrame):
 
 
         self.create_map_options()
-        self.set_checkbox_default_values()
+        #self.set_checkbox_default_values()
 
         # ---------------- GENERATE ---------------------- #
         self.generate_options_frame = ctk.CTkFrame(self)

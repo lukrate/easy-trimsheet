@@ -109,9 +109,9 @@ class Layers():
         
         if not self.workzone_widgets == None:
             self.workzone_widgets.update_canvas()
+            self.export_widgets.set_checkbox_default_values()
             if update_layers == True and not self.workzone_widgets.layers_view == None:
                 self.workzone_widgets.layers_view.create_layers()
-                self.export_widgets.set_checkbox_default_values() 
 
     def change_current_layer(self, value):
         value = int(value)
