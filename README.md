@@ -5,12 +5,12 @@
 
 ## 🚩 Table of Contents
 
-- [Features](#-features)
-- [Setup](#-setup)
-- [Release](#-release)
-- [Roadmap](#-roadmap)
-- [Contact](#-contact)
-- [License](#-license)
+- [Features](#features)
+- [Setup](#setup)
+- [Releases](#releases)
+- [Roadmap](#roadmap)
+- [Contact](#contact)
+- [License](#license)
 
 
 
@@ -33,7 +33,7 @@
 * and more...
 
 ## Setup
-
+<span id="setup"></span>
 #### Clone `master` branch to your local computer. 
 
 ```sh
@@ -69,8 +69,8 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## Release
-
+## Releases
+<span id="releases"></span>
 **Future packaged releases will be available on itch.io and gumroad.com**
 
 **PC**: Coming Soon
@@ -80,12 +80,14 @@ python main.py
 **Mac**: Coming Soon
 
 ## Roadmap
+<span id="roadmap"></span>
 Coming Soon
 
 ## Contact
+<span id="contact"></span>
 Coming Soon
 
 
 ## License
-
+<span id="license"></span>
 This software is free, open-source and licensed under the [MIT](https://github.com/nhn/tui.editor/blob/master/LICENSE)
