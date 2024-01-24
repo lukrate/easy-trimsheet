@@ -17,6 +17,8 @@
 
 ## Features
 
+<span id="features"></span>
+
 * Quick and easy editing of different textures with just two sliders, image position and image height.
 * Automatic generation of missing maps.
 * Automatic image size reduction if too large in relation to the canvas and auto-tilling if too small.
