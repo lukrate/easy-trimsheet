@@ -1,12 +1,12 @@
-/__pycache__
-/images/export
-/build
-/dist
-/output
-/external
-/fonts
-/images
-/saved_projects
+__pycache__/
+images/export
+build/
+dist/
+output/
+external/
+fonts/
+images/
+saved_projects/
 
 
 todo.md
