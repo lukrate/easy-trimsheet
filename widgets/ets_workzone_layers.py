@@ -5,6 +5,7 @@ from CTkMessagebox import CTkMessagebox
 from os import curdir
 from lib.utils import get_image_dictionnary
 from icecream import ic
+from copy import copy
 
 class WorkzoneLayers(ctk.CTkFrame):
     def __init__(self, master, layers, **kwargs):
@@ -67,8 +68,9 @@ class WorkzoneLayers(ctk.CTkFrame):
             images_path = os.path.split(images_path.name)[0]
         except AttributeError:
             print("open path failed")
-        
+
         try:
+            self.layers.change_all_material_map("color")
             self.layers.add_new_image(get_image_dictionnary(images_path))
         except TypeError as e:
             CTkMessagebox(title="Color Map", message="No Color Map found! \n \nYou need a image with '_col_', '_color_' in the name.",
@@ -76,7 +78,6 @@ class WorkzoneLayers(ctk.CTkFrame):
             pass
     
     def change_current_map(self, map_name):
-        self.layers.current_map_type = map_name
         self.layers.change_all_material_map(map_name)
 
 

@@ -8,10 +8,10 @@ import os
 
 class EtsImage:
 
-    def __init__(self, images_dict, project_size):
+    def __init__(self, images_dict, project_size, current_map_type):
         self.collection = images_dict
-        self.path = os.path.join(self.collection["path"], self.collection["color"])
-        self.current_map_type = "color"
+        self.path = os.path.join(self.collection["path"], self.collection[current_map_type])
+        self.current_map_type = current_map_type
         self.width = None
         self.project_size = project_size
         self.height = None

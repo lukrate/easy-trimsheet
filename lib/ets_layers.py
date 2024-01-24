@@ -37,7 +37,7 @@ class Layers():
     def add_new_image(self, images_dict:dict = None, height = None, posx = 0, posy = 0):
         height = self.get_free_space() if height == None else height
         if not images_dict == None:
-            self.images.append(EtsImage(images_dict, self.size))
+            self.images.append(EtsImage(images_dict, self.size, self.current_map_type))
             self.get_available_maps()
             self.images[-1].trim_image(posx, posy, height=height, width=self.size)
             try:
@@ -137,6 +137,7 @@ class Layers():
         self.construct_image(update_layers=True)
 
     def change_all_material_map(self, map_name):
+        self.current_map_type = map_name
         for image in self.images:
             image.change_material_map(map_name)
         self.construct_image(update_layers=True)
