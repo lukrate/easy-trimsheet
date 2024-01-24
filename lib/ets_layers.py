@@ -36,7 +36,7 @@ class Layers():
         return img
     
     def add_new_image(self, images_dict:dict = None, height = None, posx = 0, posy = 0):
-        height = self.get_free_space() if self.get_free_space() or height == None else height
+        height = self.get_free_space() if height == None else height
         if not images_dict == None:
             self.images.append(EtsImage(images_dict, self.size))
             self.get_available_maps()
@@ -146,7 +146,7 @@ class Layers():
         self.images[id].change_image_rotation(value)
         self.construct_image(update_layers=False)
 
-    def export_final_files(self, selected_files, file_name, destination_folder, format, options, generate_arm, genereate_id):
+    def export_final_files(self, selected_files, file_name, destination_folder, format, options, generate_arm, genereate_id, genereate_text_layers_data):
         
         def render_threaded():
             
@@ -183,6 +183,9 @@ class Layers():
             if genereate_id:
                 self.save_file(self.get_generated_id_map(), 
                                format, options, destination_folder, file_name, "ID")
+            
+            if genereate_text_layers_data:
+                self.save_layers_data(destination_folder, file_name)
 
             self.change_all_material_map(first_map_type)
             self.open_render_complete_box(destination_folder)
@@ -222,6 +225,18 @@ class Layers():
             i += 1
         self.construct_image()
         return self.stacked_trim
+
+    def save_layers_data(self, destination_folder, file_name):
+        file_path = os.path.join(destination_folder, f"ets_layers_{file_name}.txt")
+        with open(file_path,"w") as file:
+            for key, img in enumerate(self.images):
+                title = f"Layer {key}\n"
+                file.write(title)
+                height = f"Height: {img.current_height}\n"
+                file.write(height)
+                position = f"Position: {img.current_pos_y}\n"
+                file.write(position)
+                file.write("\n-----------------------\n\n")
 
     def open_render_complete_box(self, destination_folder):
         box = CTkMessagebox(message="Rendering is complete!", title="Compelete!",

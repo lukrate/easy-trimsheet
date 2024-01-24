@@ -54,6 +54,9 @@ class Exportzone(ctk.CTkFrame):
 
         self.genereate_id = ctk.CTkCheckBox(self.generate_options_frame, text="ID map")
         self.genereate_id.grid(column = 0, row= 2 , padx = 12, pady = 8, sticky="w")
+        
+        self.genereate_text_layers_data = ctk.CTkCheckBox(self.generate_options_frame, text="Layers data as text")
+        self.genereate_text_layers_data.grid(column = 0, row= 3 , padx = 12, pady = 8, sticky="w")
 
 
 
@@ -172,7 +175,7 @@ class Exportzone(ctk.CTkFrame):
                     else:
                         break
 
-            self.layers.export_final_files(self.get_checkbox_true_values(), self.file_name.get(), self.destination_folder.get(), self.format, self.options_frame.get_values(), self.genereate_arm.get(), self.genereate_id.get())
+            self.layers.export_final_files(self.get_checkbox_true_values(), self.file_name.get(), self.destination_folder.get(), self.format, self.options_frame.get_values(), self.genereate_arm.get(), self.genereate_id.get(), self.genereate_text_layers_data.get())
 
 
 class JpegOptions(ctk.CTkFrame):

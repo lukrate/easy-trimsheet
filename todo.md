@@ -19,6 +19,8 @@
 [] export layout as txt
 [] add message box if no color map
 
+[] bug correction height on load
+
 [] settings edit-save ??
 
 Multidimensional image processing 
