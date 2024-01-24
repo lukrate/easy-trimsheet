@@ -68,6 +68,31 @@ pip install -r requirements.txt
 ```sh
 python main.py
 ```
+#### Import your first image
+To import your first image, click on the + button in the top right-hand corner of the work area.
+
+Select any image in your folder.
+
+It is important that your folder contains only images of the material concerned, and that the file names contain the map type as follows:
+
+```python
+FILE_NAME_PATTERNS = {
+    "color": ["_albedo_", "_albedo","_diff_", "_diffuse","diffuse", "diff", "_col_", "color", "col"],
+    "roughness": ["_rough_", "_roughness", "roughness"],
+    "displacement": ["_disp_", "_displacement", "_disp", "displacement", "disp"],
+    "metalness": ["_metal_", "_metalness", "metalness"],
+    "normal": ["_nor_", "_normal", "normal", "nor", "norm"],
+    "normal_gl": ["_gl_", "gl", "opengl"],
+    "normal_dx": ["_dx_", "dx", "directx"],
+    "ao": ["_ao_", "_ambientocclusion", "ambientocclusion", "ambient", "occlusion"],
+    "emission": ["_emit_", "_emiss_", "_emission", "emission"],
+    "opacity": ["_opacity_", "_opacity", "_transparent", "transparent"],
+    "specular": ["_spec_", "_specular", "specular"],
+    "bump":["_bump_", "_bump", "bump"]
+}
+```
+
+
 
 ## Releases
 <span id="releases"></span>
