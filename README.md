@@ -15,7 +15,7 @@
 
 
 
-## 🎨 Features
+## Features
 
 * Quick and easy editing of different textures with just two sliders, image position and image height.
 * Automatic generation of missing maps.
@@ -71,17 +71,19 @@ python main.py
 
 **Future packaged releases will be available on itch.io and gumroad.com**
 
-PC - Coming Soon
-Linux - Coming Soon
-Mac - Coming Soon
+**PC**: Coming Soon
+
+**Linux**: Coming Soon
+
+**Mac**: Coming Soon
 
 ## Roadmap
 Coming Soon
 
-## 💬 Contact
+## Contact
 Coming Soon
 
 
-## 📜 License
+## License
 
 This software is free, open-source and licensed under the [MIT](https://github.com/nhn/tui.editor/blob/master/LICENSE)
