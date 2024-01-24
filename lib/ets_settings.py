@@ -24,7 +24,7 @@ CLOSE_RED = "8a0606"
 SLIDER_BG = "#64686b"
 
 FILE_NAME_PATTERNS = {
-    "color": ["_diff_", "_diffuse","diffuse", "diff", "_col_", "color", "col"],
+    "color": ["_albedo_", "_albedo","_diff_", "_diffuse","diffuse", "diff", "_col_", "color", "col"],
     "roughness": ["_rough_", "_roughness", "roughness"],
     "displacement": ["_disp_", "_displacement", "_disp", "displacement", "disp"],
     "metalness": ["_metal_", "_metalness", "metalness"],
@@ -33,6 +33,7 @@ FILE_NAME_PATTERNS = {
     "normal_dx": ["_dx_", "dx", "directx"],
     "ao": ["_ao_", "_ambientocclusion", "ambientocclusion", "ambient", "occlusion"],
     "emission": ["_emit_", "_emiss_", "_emission", "emission"],
+    "opacity": ["_opacity_", "_opacity", "_transparent", "transparent"],
     "specular": ["_spec_", "_specular", "specular"],
     "bump":["_bump_", "_bump", "bump"]
 }
