@@ -17,6 +17,7 @@
 [X] generate id map
 
 [] export layout as txt
+[] add message box if no color map
 
 [] settings edit-save ??
 

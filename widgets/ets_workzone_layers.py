@@ -67,9 +67,12 @@ class WorkzoneLayers(ctk.CTkFrame):
             images_path = os.path.split(images_path.name)[0]
         except AttributeError:
             print("open path failed")
+        
         try:
             self.layers.add_new_image(get_image_dictionnary(images_path))
-        except TypeError:
+        except TypeError as e:
+            CTkMessagebox(title="Color Map", message="No Color Map found! \n \nYou need a image with '_col_', '_color_' in the name.",
+                  icon="warning", option_1="OK")
             pass
     
     def change_current_map(self, map_name):
@@ -151,7 +154,7 @@ class WorkzoneLayer(ctk.CTkFrame):
             pass
 
     def delete_layer(self, id):
-        box = CTkMessagebox(message="Delete the layer ?",
+        box = CTkMessagebox(title="Delete the layer ?", message="Delete the layer ?",
                   icon="warning", option_1="OK", option_2="Cancel")
         
         resp = box.get()
