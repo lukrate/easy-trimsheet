@@ -31,7 +31,7 @@ class Opening(ctk.CTkFrame):
 
     def open_dialog(self):
         try:
-            path = filedialog.askopenfile(initialdir=f"{curdir}/saved_projects").name
+            path = filedialog.askopenfile(initialdir=f"{curdir}").name
             self.init_app_func(path=path)
             
         except (AttributeError, FileNotFoundError) as e:

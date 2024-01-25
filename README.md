@@ -13,8 +13,6 @@
 - [License](#license)
 
 
-
-
 ## Features
 
 <span id="features"></span>
@@ -25,7 +23,7 @@
 * Automatic import of maps into folder based on name patterns, just need a color map
 * Image rotatation
 * Organization by layer
-* Layer duplcation
+* Layer duplication
 * ID map genration
 * ARM map generation
 * *.jpg, *.png, *.webp export
@@ -73,7 +71,7 @@ To import your first image, click on the + button in the top right-hand corner o
 
 Select any image in your folder.
 
-It is important that your folder contains only images of the material concerned, and that the file names contain the map type as follows:
+> It is important that your folder contains only images of the material concerned, and that the file names contain the map type as follows:
 
 ```python
 FILE_NAME_PATTERNS = {

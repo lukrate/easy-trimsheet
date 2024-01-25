@@ -19,6 +19,7 @@ class EtsImage:
         self.dtype = None
         self.shape:tuple = None # (w, h, layers)
 
+        self.is_generated = False
         self.is_rotate = False
         self.rotation_value = 0
         self.thumbnails = {}
@@ -33,21 +34,24 @@ class EtsImage:
     def openImage(self, generated_img = None):
         if generated_img == None:
             self.pil_image = Image.open(self.path).convert("RGB")
+            self.is_generated = False
         else:
             self.pil_image = generated_img
+            self.is_generated = True
 
         self.np_image = np.array(self.pil_image)
 
         self.original_np_image = self.np_image.copy()
-
-        self.np_image = self.get_horizonatal_stack(self.np_image)
-        self.np_image = self.get_downscaled_image(self.np_image)
-    
+        
         self.dtype = self.np_image.dtype
         self.shape = self.np_image.shape
         self.width = self.shape[1]
         self.height = self.shape[0]
         self.image_ratio = self.width / self.height
+
+        self.np_image = self.get_horizonatal_stack(self.np_image)
+        self.np_image = self.get_downscaled_image(self.np_image)
+    
 
     def trim_image(self, x, y, width=0, height=0):
         self.current_pos_x = x
@@ -91,6 +95,7 @@ class EtsImage:
             self.openImage()
         else:
             self.generate_missing_map(map_name)
+            
         if self.is_rotate:
             self.change_image_rotation(self.rotation_value)
             

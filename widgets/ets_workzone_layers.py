@@ -16,6 +16,8 @@ class WorkzoneLayers(ctk.CTkFrame):
         self.open_image_window = None
         self.is_first_generation = True
 
+        self.default_open_folder = curdir
+
         self.grid(row = 0, column = 3, sticky="nsew", rowspan=3)
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
@@ -63,9 +65,10 @@ class WorkzoneLayers(ctk.CTkFrame):
             self.is_first_generation = False
 
     def open_image_view(self):
-        images_path = (filedialog.askopenfile(initialdir=f"{curdir}/images"))
+        images_path = (filedialog.askopenfile(initialdir=f"{self.default_open_folder}"))
         try:
             images_path = os.path.split(images_path.name)[0]
+            self.default_open_folder = images_path
         except AttributeError:
             print("open path failed")
         try:
@@ -119,7 +122,8 @@ class WorkzoneLayer(ctk.CTkFrame):
         )
         self.thumbnail_button.grid(column=0, rowspan=2, sticky="nsw")
         
-        self.thumbnail_label = ctk.CTkLabel(self, text=f"Layer {id}")
+        generated_text = " - (missing map)" if layers.images[id].is_generated else ""
+        self.thumbnail_label = ctk.CTkLabel(self, text=f"Layer {id}{generated_text}")
         self.thumbnail_label.grid(column=1, row=0, sticky="nsw", padx=20)
 
         self.rotation_menu = ctk.CTkOptionMenu(self, values=ROTATIONS_OPTIONS, command=lambda value: self.layers.change_image_rotation(value, self.id))
